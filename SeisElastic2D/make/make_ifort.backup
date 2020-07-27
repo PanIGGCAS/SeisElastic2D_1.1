@@ -1,6 +1,6 @@
 FC = ifort
 FCFLAGS=-g
-FLAGS=-O3 -no-ip -fno-fnalias -fno-alias -vec-report1 -assume byterecl -sox -cpp  -traceback -w -ftz
+FLAGS=-O3 -xSSSE3 -no-ip -fno-fnalias -fno-alias -vec-report1 -assume byterecl -sox -cpp  -traceback -w -ftz
 MPIFC=mpif90
 
 SRC_DIR=SRC
