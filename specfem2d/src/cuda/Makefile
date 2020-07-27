@@ -1,4 +1,3 @@
-
 #========================================================================
 #
 #                   S P E C F E M 2 D  Version 7 . 0
@@ -41,62 +40,25 @@
 #
 #========================================================================
 
-## compilation directories
-S := ${S_TOP}/src/cuda
-$(cuda_OBJECTS): S = ${S_TOP}/src/cuda
+DIR = cuda
 
-#######################################
-
-cuda_TARGETS = \
-	$(cuda_OBJECTS) \
-	$(EMPTY_MACRO)
-
-cuda_OBJECTS = \
-	$O/assemble_MPI_scalar_cuda.cuda.o \
-	$O/assemble_MPI_vector_cuda.cuda.o \
-	$O/check_fields_cuda.cuda.o \
-	$O/compute_add_sources_acoustic_cuda.cuda.o \
-	$O/compute_add_sources_viscoelastic_cuda.cuda.o \
-	$O/compute_coupling_cuda.cuda.o \
-	$O/compute_forces_acoustic_cuda.cuda.o \
-	$O/compute_forces_viscoelastic_cuda.cuda.o \
-	$O/compute_kernels_cuda.cuda.o \
-	$O/compute_stacey_acoustic_cuda.cuda.o \
-	$O/compute_stacey_viscoelastic_cuda.cuda.o \
-	$O/initialize_cuda.cuda.o \
-	$O/prepare_mesh_constants_cuda.cuda.o \
-	$O/transfer_fields_cuda.cuda.o \
-	$O/update_displacement_cuda.cuda.o \
-	$O/write_seismograms_cuda.cuda.o \
-	$(EMPTY_MACRO)
-
-
-cuda_STUBS = \
-	$O/specfem2D_wrapper_cuda_method_stubs.cudaf90.o \
-	$O/specfem2D_gpu_cuda_method_stubs.cudacc.o \
-	$(EMPTY_MACRO)
-
-
-cuda_DEVICE_OBJ = \
-	$O/cuda_device_obj.o \
-	$(EMPTY_MACRO)
-
-
+# The rest of this file is generic
 #######################################
 
 ####
-#### rule for each .o file below
+#### targets
 ####
 
-###
-### CUDA compilation
-###
+default:
+	$(MAKE) -C ../.. $(DIR)
 
-$O/%.cuda.o: $S/%.cu ${SETUP}/config.h $S/mesh_constants_cuda.h $S/prepare_constants_cuda.h
-	${NVCC} -c $< -o $@ $(NVCC_FLAGS)
+all:
+	$(MAKE) -C ../.. all
 
-$O/%.cudacc.o: $S/%.c ${SETUP}/config.h
-	${CC} -c $(CPPFLAGS) $(CFLAGS) $(MPI_INCLUDES) -o $@ $<
+clean:
+	$(MAKE) -C ../.. CLEAN=$(DIR) clean
 
-$O/%.cudaf90.o: $S/%.f90
-	${F90} ${FCFLAGS_f90} -c -o $@ $<
+cleanall:
+	$(MAKE) -C ../.. clean
+
+.PHONY: default all clean cleanall
