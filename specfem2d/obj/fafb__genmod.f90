@@ -1,13 +1,13 @@
         !COMPILER-GENERATED INTERFACE MODULE: Fri May 22 16:59:06 2020
         ! This source file is for reference only and may not completely
         ! represent the generated interface used by the compiler.
-        MODULE A2B2__genmod
+        MODULE FAFB__genmod
           INTERFACE 
-            SUBROUTINE A2B2(FA,FB,A2,B2)
+            SUBROUTINE FAFB(CA,CB,FA,FB)
+              REAL(KIND=8) :: CA
+              REAL(KIND=8) :: CB
               COMPLEX(KIND=8) :: FA
               COMPLEX(KIND=8) :: FB
-              COMPLEX(KIND=8) :: A2
-              COMPLEX(KIND=8) :: B2
-            END SUBROUTINE A2B2
+            END SUBROUTINE FAFB
           END INTERFACE 
-        END MODULE A2B2__genmod
+        END MODULE FAFB__genmod
