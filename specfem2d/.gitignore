@@ -1,0 +1,33 @@
+
+# Configure time
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+Makefile
+
+EXAMPLES
+tests
+doc
+OUTPUT_FILES
+DATA
+AUTHORS
+LICENSE
+
+setup/config.h
+setup/constants.h
+setup/precision.h
+
+# Scotch files
+src/meshfem2D/scotch_5.1.12b/*
+
+# Build time
+bin/*
+obj/*
+*.mod
+*__genmod.f90
+
+# Trash files
+.*swp
+.*swo
+*~
