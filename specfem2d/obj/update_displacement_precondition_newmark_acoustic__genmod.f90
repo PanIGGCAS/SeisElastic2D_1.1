@@ -1,0 +1,24 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri May 22 16:59:45 2020
+        ! This source file is for reference only and may not completely
+        ! represent the generated interface used by the compiler.
+        MODULE UPDATE_DISPLACEMENT_PRECONDITION_NEWMARK_ACOUSTIC__genmod
+          INTERFACE 
+            SUBROUTINE UPDATE_DISPLACEMENT_PRECONDITION_NEWMARK_ACOUSTIC&
+     &(DELTAT,DELTATOVER2,DELTATSQUAREOVER2,POTENTIAL_DOT_DOT_ACOUSTIC, &
+     &POTENTIAL_DOT_ACOUSTIC,POTENTIAL_ACOUSTIC,POTENTIAL_ACOUSTIC_OLD, &
+     &PML_BOUNDARY_CONDITIONS)
+              USE SPECFEM_PAR, ONLY :                                   &
+     &          NGLOB_ACOUSTIC
+              REAL(KIND=8) :: DELTAT
+              REAL(KIND=8) :: DELTATOVER2
+              REAL(KIND=8) :: DELTATSQUAREOVER2
+              REAL(KIND=4) :: POTENTIAL_DOT_DOT_ACOUSTIC(NGLOB_ACOUSTIC)
+              REAL(KIND=4) :: POTENTIAL_DOT_ACOUSTIC(NGLOB_ACOUSTIC)
+              REAL(KIND=4) :: POTENTIAL_ACOUSTIC(NGLOB_ACOUSTIC)
+              REAL(KIND=4) :: POTENTIAL_ACOUSTIC_OLD(NGLOB_ACOUSTIC)
+              LOGICAL(KIND=4) :: PML_BOUNDARY_CONDITIONS
+            END SUBROUTINE                                              &
+     &UPDATE_DISPLACEMENT_PRECONDITION_NEWMARK_ACOUSTIC
+          END INTERFACE 
+        END MODULE                                                      &
+     &UPDATE_DISPLACEMENT_PRECONDITION_NEWMARK_ACOUSTIC__genmod
