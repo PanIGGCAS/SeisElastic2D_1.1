@@ -1,0 +1,3 @@
+mv scotch_6.0.4 scotch
+
+./configure CC=icc FC=ifort MPIFC=mpif90 --with-scotch-dir=./src/meshfem2D/scotch --with-mpi MPI_INC=/vol6/software/mpi/mpi-intel2013/include
