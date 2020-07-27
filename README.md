@@ -4,9 +4,14 @@ SeisElastic2D is an open-source package for multiparameter FWI in isotropic-, an
 
 This package is developed on parallel computing cluster with OpenMPI/MPI. It provides different misfit functions, model parameterizations, advanced optimization methods, flexible inversion strategies and workflows, etc.  These features make it promising to overcome the difficulties in multiparameter elastic FWI and bridge the gap between adademic studies and industrial application. Using SeisElastic2D, we have applied isotropic-, VTI- and visco-elastic FWI to practical seismic data for hydrocarbon reservoir characterization.
 
-Compared to SeisElastic2D version 1.0, this new version provides three different approaches for calculating the Q sensitivity kernels in visco-elastic FWI. New parameters can added to handle complex topographic variations.
+Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2D), this new version has the following updates:
 
-
+(1) The package structure has been changed for easy-using;
+(2) Scripts are provided for runing the forward modelling and FWI experiments on local desktop;
+(3) Three different approaches are provided for calculating the Q sensitivity kernels in visco-elastic FWI.
+(4) New parameters are added for forward modelling and FWI with complex topographic variations.
+(5) Scripts for 3D forward modelling and FWI experiments with GPU are added (the 3D modeling and FWI codes are not provided!)
+(6) One single shell script are added for user to setup the environment paths and run the forward modeling and FWI experiments. 
 
 For downloading and using this package for your own studies, please cite the following publications:
 
