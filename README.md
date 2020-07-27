@@ -13,6 +13,11 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 (5) Scripts for 3D forward modelling and FWI experiments with GPU are added (the 3D modeling and FWI codes are not provided!)
 (6) One single shell script are added for user to setup the environment paths and run the forward modeling and FWI experiments. 
 
+Please following the steps listed below for installing the package:
+
+(1) Install the prerequisite packages as introduced in section 2.2.1 of the manual;
+(2) 
+
 For downloading and using this package for your own studies, please cite the following publications:
 
 Pan, W., Innanen, K & Wang, Y., 2020. Parameterization analysis and field validation of VTI-elastic full-waveform inversion in a walk-away vertical seismic profile configuration, Geophysics. 85(3), B87-B107.
