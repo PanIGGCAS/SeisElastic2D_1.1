@@ -1,5 +1,5 @@
-program sum_kernel
-    ! To sum all event kernels
+program mask_kernel_topo
+    ! To mask kernels with topography
 
 #ifdef USE_MPI
     use mpi
@@ -33,13 +33,13 @@ program sum_kernel
 #endif
 
     if (DISPLAY_DETAILS .and. myrank == 0) &
-        print *,"Running sum_kernel.exe on",NPROC,"processors"
+        print *,"Running mask_kernel_topo.exe on",NPROC,"processors"
     call cpu_time(t1)
 
     ! parse command line arguments
     if (command_argument_count() /= NARGS) then
         if (myrank == 0) then
-            print *, 'USAGE:  mpirun -np NPROC bin/sum_kernel.exe ...'
+            print *, 'USAGE:  mpirun -np NPROC bin/mask_kernel_topo.exe ...'
             stop ' Please check command line arguments'
         endif
     endif
@@ -74,17 +74,10 @@ program sum_kernel
     ! loop over kernel
     do iker= 1, nker
     if(len(trim(adjustl(kernel_names(iker))))>0) then !non-empty
-        ! initialize
-        sum_dat = 0.0_CUSTOM_REAL
-        dat = 0.0_CUSTOM_REAL
-
-        ! loop over event
-        do isrc=0, NSRC-1
-
         !! kernel file
-        write(filename,'(a,i6.6,a,i6.6,a)') &
-            trim(input_dir)//'/',isrc,'/'//trim(LOCAL_PATH)//'/proc',&
-            myrank,'_'//trim(adjustl(kernel_names(iker)))//'.bin'
+        write(filename,'(a,i6.6,a)') &
+            trim(output_dir)//'/misfit_kernel/proc',myrank,&
+            '_'//trim(adjustl(kernel_names(iker)))//'_smooth.bin'
         if (DISPLAY_DETAILS .and. myrank == 0 .and. isrc==0) &
             print*,'LOAD event_kernel --', trim(adjustl(kernel_names(iker)))
         ! gets slice of kernel
@@ -94,60 +87,34 @@ program sum_kernel
             stop 'Error reading neighbors external mesh file'
         endif
         ! global point arrays
-        read(IIN) dat
+        read(IIN) sum_dat
         close(IIN)
-        if(DISPLAY_DETAILS .and. myrank==0 .and. isrc==0) &
-            print *,' Min / Max = ',&
-            minval(dat(:,:,:,:)),maxval(dat(:,:,:,:))
 
-        !! mask before summation
-        if (MASK_SOURCE .or. MASK_STATION .or. MASK_MODEL) then 
-            write(filename,'(a,i6.6,a,i6.6,a)') &
-                trim(input_dir)//'/',isrc,'/'//trim(LOCAL_PATH)//'/proc',&
-                myrank,'_mask.bin'
-            open(unit=IIN,file=trim(filename),status='old',action='read',form='unformatted',iostat=ier)
-            if (ier /= 0) then
-                print *,'Error: could not open kernel file: ',trim(filename)
-                stop 'Error reading neighbors external mesh file'
-            endif
-            read(IIN) mask
-            close(IIN)
-            print *,'PWY The maximum value of mask function:',maxval(mask(:,:,:,:))
-            print *,'PWY The minimum value of mask function:',minval(mask(:,:,:,:))
-            if (myrank == 0 .and. isrc==0 .and. iker==0)  &
-                print*,'LOAD mask file -- ',trim(filename)
-        endif  
+    if(DISPLAY_DETAILS .and. myrank==0 .and. isrc==0) &
+        print *,' Min / Max = ',&
+        minval(dat(:,:,:,:)),maxval(dat(:,:,:,:))
 
-        sum_dat = sum_dat + dat * mask
-        !! sum over isrc !! modified by PWY 01-19-2018
-        !if(trim(adjustl(kernel_names(iker)))=='hessian1_kernel') then
-        !    sum_dat = sum_dat + abs(dat) * mask
-        !else
-        !    sum_dat = sum_dat + dat * mask
-        !endif
-
-        enddo   ! isrc
-        !! 12-15-2019 by PWY add topography mask
-        if (MASK_TOPO) then
-            write(filename,'(a,i6.6,a,i6.6,a)') &
-                trim(input_dir)//'/000000/'//'/DATA/'//'/proc',&
-                myrank,'_mask_topo.bin'
-            open(unit=IIN,file=trim(filename),status='old',action='read',form='unformatted',iostat=ier)
-            if (ier /= 0) then
-                print *,'Error: could not open kernel file: ',trim(filename)
-                stop 'Error reading neighbors external mesh file'
-            endif
-            read(IIN) mask_topo_fc
-            close(IIN)
-            if (myrank == 0 .and. isrc==0 .and. iker==0)  &
-                print*,'LOAD topo mask file -- ',trim(filename)
- 
-            sum_dat = sum_dat * mask_topo_fc
+        ! read topography mask function
+        write(filename,'(a,i6.6,a,i6.6,a)') &
+            trim(input_dir)//'/000000/'//'/DATA/'//'/proc',&
+            myrank,'_mask_topo.bin'
+        open(unit=IIN,file=trim(filename),status='old',action='read',form='unformatted',iostat=ier)
+        if (ier /= 0) then
+            print *,'Error: could not open kernel file: ',trim(filename)
+            stop 'Error reading neighbors external mesh file'
         endif
-        !! SAVE summed kernel
+        read(IIN) mask_topo_fc
+        close(IIN)
+        if (myrank == 0 .and. isrc==0 .and. iker==0)  &
+            print*,'LOAD topo mask file -- ',trim(filename)
+ 
+        ! do topography mask
+        sum_dat = sum_dat * mask_topo_fc
+       
+        !! SAVE masked kernel
         write(filename,'(a,i6.6,a)') &
             trim(output_dir)//'/misfit_kernel/proc',myrank,&
-            '_'//trim(adjustl(kernel_names(iker)))//'.bin'
+            '_'//trim(adjustl(kernel_names(iker)))//'_smooth.bin'
         if (myrank == 0) &
             print*,'SAVE misfit_kernel -- ',trim(adjustl(kernel_names(iker)))
         open(unit=IOUT,file=trim(filename),status='unknown',form='unformatted',iostat=ier)
@@ -180,7 +147,7 @@ program sum_kernel
     call MPI_FINALIZE(ier)
 #endif
 
-end program sum_kernel
+end program mask_kernel_topo
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine initialize(directory)
     use seismo_parameters

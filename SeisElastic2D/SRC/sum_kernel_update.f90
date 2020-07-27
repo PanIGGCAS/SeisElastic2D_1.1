@@ -1,5 +1,6 @@
-program sum_kernel
+program sum_kernel_update
     ! To sum all event kernels
+    ! yanhuay@princeton.edu
 
 #ifdef USE_MPI
     use mpi
@@ -16,7 +17,6 @@ program sum_kernel
     integer :: iker
     real(kind=CUSTOM_REAL), dimension(:,:,:,:),allocatable :: dat
     real(kind=CUSTOM_REAL), dimension(:,:,:,:),allocatable :: sum_dat
-    real(kind=CUSTOM_REAL), dimension(:,:,:,:),allocatable :: mask_topo_fc ! PWY
     character(len=MAX_STRING_LEN) :: arg(NARGS)
     character(len=MAX_STRING_LEN) :: input_dir,output_dir
     character(len=MAX_FILENAME_LEN) :: filename
@@ -33,13 +33,13 @@ program sum_kernel
 #endif
 
     if (DISPLAY_DETAILS .and. myrank == 0) &
-        print *,"Running sum_kernel.exe on",NPROC,"processors"
+        print *,"Running sum_kernel_update.exe on",NPROC,"processors"
     call cpu_time(t1)
 
     ! parse command line arguments
     if (command_argument_count() /= NARGS) then
         if (myrank == 0) then
-            print *, 'USAGE:  mpirun -np NPROC bin/sum_kernel.exe ...'
+            print *, 'USAGE:  mpirun -np NPROC bin/sum_kernel_update.exe ...'
             stop ' Please check command line arguments'
         endif
     endif
@@ -59,17 +59,15 @@ program sum_kernel
     call split_string(kernel_names_comma_delimited,delimiter,kernel_names,nker)
 
     !! initialization  -- get number of spectral elements
-    call initialize(output_dir) 
+    call initialize_update(output_dir) 
 
     !! allocation 
     allocate(dat(NGLLX,NGLLY,NGLLZ,NSPEC))
     allocate(sum_dat(NGLLX,NGLLY,NGLLZ,NSPEC))
     allocate(mask(NGLLX,NGLLY,NGLLZ,NSPEC))
-    allocate(mask_topo_fc(NGLLX,NGLLY,NGLLZ,NSPEC))
     sum_dat = 0.0_CUSTOM_REAL
     dat = 0.0_CUSTOM_REAL
     mask = 1.0
-    mask_topo_fc = 1.0
 
     ! loop over kernel
     do iker= 1, nker
@@ -95,13 +93,13 @@ program sum_kernel
         endif
         ! global point arrays
         read(IIN) dat
-        close(IIN)
-        if(DISPLAY_DETAILS .and. myrank==0 .and. isrc==0) &
-            print *,' Min / Max = ',&
-            minval(dat(:,:,:,:)),maxval(dat(:,:,:,:))
+    close(IIN)
+    if(DISPLAY_DETAILS .and. myrank==0 .and. isrc==0) &
+        print *,' Min / Max = ',&
+        minval(dat(:,:,:,:)),maxval(dat(:,:,:,:))
 
         !! mask before summation
-        if (MASK_SOURCE .or. MASK_STATION .or. MASK_MODEL) then 
+        if (MASK_SOURCE .or. MASK_STATION) then 
             write(filename,'(a,i6.6,a,i6.6,a)') &
                 trim(input_dir)//'/',isrc,'/'//trim(LOCAL_PATH)//'/proc',&
                 myrank,'_mask.bin'
@@ -112,44 +110,24 @@ program sum_kernel
             endif
             read(IIN) mask
             close(IIN)
-            print *,'PWY The maximum value of mask function:',maxval(mask(:,:,:,:))
-            print *,'PWY The minimum value of mask function:',minval(mask(:,:,:,:))
             if (myrank == 0 .and. isrc==0 .and. iker==0)  &
                 print*,'LOAD mask file -- ',trim(filename)
         endif  
 
-        sum_dat = sum_dat + dat * mask
         !! sum over isrc !! modified by PWY 01-19-2018
-        !if(trim(adjustl(kernel_names(iker)))=='hessian1_kernel') then
-        !    sum_dat = sum_dat + abs(dat) * mask
-        !else
-        !    sum_dat = sum_dat + dat * mask
-        !endif
-
-        enddo   ! isrc
-        !! 12-15-2019 by PWY add topography mask
-        if (MASK_TOPO) then
-            write(filename,'(a,i6.6,a,i6.6,a)') &
-                trim(input_dir)//'/000000/'//'/DATA/'//'/proc',&
-                myrank,'_mask_topo.bin'
-            open(unit=IIN,file=trim(filename),status='old',action='read',form='unformatted',iostat=ier)
-            if (ier /= 0) then
-                print *,'Error: could not open kernel file: ',trim(filename)
-                stop 'Error reading neighbors external mesh file'
-            endif
-            read(IIN) mask_topo_fc
-            close(IIN)
-            if (myrank == 0 .and. isrc==0 .and. iker==0)  &
-                print*,'LOAD topo mask file -- ',trim(filename)
- 
-            sum_dat = sum_dat * mask_topo_fc
+        if(trim(adjustl(kernel_names(iker)))=='hessian1_kernel') then
+            sum_dat = sum_dat + abs(dat) * mask
+        else
+            sum_dat = sum_dat + dat * mask
         endif
+        enddo   ! isrc
+
         !! SAVE summed kernel
         write(filename,'(a,i6.6,a)') &
-            trim(output_dir)//'/misfit_kernel/proc',myrank,&
+            trim(output_dir)//'/misfit_kernel_update/proc',myrank,&
             '_'//trim(adjustl(kernel_names(iker)))//'.bin'
         if (myrank == 0) &
-            print*,'SAVE misfit_kernel -- ',trim(adjustl(kernel_names(iker)))
+            print*,'SAVE misfit_kernel_update -- ',trim(adjustl(kernel_names(iker)))
         open(unit=IOUT,file=trim(filename),status='unknown',form='unformatted',iostat=ier)
         if (ier /= 0) then
             print*, 'Error: could not open gradient file: ',trim(filename)
@@ -169,7 +147,6 @@ program sum_kernel
     deallocate(dat)
     deallocate(sum_dat) 
     deallocate(mask)
-    deallocate(mask_topo_fc)
 
     call cpu_time(t2)
 
@@ -180,9 +157,9 @@ program sum_kernel
     call MPI_FINALIZE(ier)
 #endif
 
-end program sum_kernel
+end program sum_kernel_update
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine initialize(directory)
+subroutine initialize_update(directory)
     use seismo_parameters
     implicit none
     integer :: ier
@@ -201,5 +178,5 @@ subroutine initialize(directory)
     close(IIN)
     if(DISPLAY_DETAILS .and. myrank==0) print*,'number of elements : ',nspec
 
-end subroutine initialize
+end subroutine initialize_update
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
