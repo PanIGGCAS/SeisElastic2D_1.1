@@ -15,8 +15,17 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 
 Please following the steps listed below for installing the package:
 
-(1) Install the prerequisite packages as introduced in section 2.2.1 of the manual;
-(2) 
+(1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
+
+(2) Set the paths for SeisElastic2D with the script of 0_setup.sh, as introduced in section 2.2.2 of the manual;
+
+(3) Install scotch and SPECFEM2D, as introduced in section 2.2.3 of the manual;
+
+(4) Do forward modeling, as introduced in section 3 of the manual. Script of 1_forward_modeling_example.sh is provided to do forward modeling and generate the model files.
+
+(5) Do inversion experiment, as introduce in sections 2.2.4 and 4 of the manual; Script of 2_inversion_example.sh is provided to do inversion experiment.
+
+(6) plot the results with the script of 3_plot_results.sh.
 
 For downloading and using this package for your own studies, please cite the following publications:
 
