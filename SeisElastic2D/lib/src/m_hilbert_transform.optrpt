@@ -1,0 +1,98 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+
+Begin optimization report for: M_HILBERT_TRANSFORM::HILBERT
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at src/m_hilbert_transform.f90(31,9)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at src/m_hilbert_transform.f90(31,9)
+      remark #15300: LOOP WAS VECTORIZED
+   LOOP END
+
+   LOOP BEGIN at src/m_hilbert_transform.f90(31,9)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(32,9)
+<Peeled loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(32,9)
+   remark #15300: LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(32,9)
+<Alternate Alignment Vectorized Loop>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(32,9)
+<Remainder loop for vectorization>
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(32,9)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(37,9)
+   remark #15300: LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(37,9)
+<Remainder loop for vectorization>
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(37,9)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(41,9)
+<Peeled loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(41,9)
+   remark #15300: LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(41,9)
+<Remainder loop for vectorization>
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(41,9)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(43,9)
+<Peeled loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(43,9)
+   remark #15300: LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(43,9)
+<Remainder loop for vectorization>
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(43,9)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(49,9)
+   remark #25460: No loop optimizations reported
+LOOP END
+
+LOOP BEGIN at src/m_hilbert_transform.f90(49,9)
+<Remainder>
+LOOP END
+===========================================================================
