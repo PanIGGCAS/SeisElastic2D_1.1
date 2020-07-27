@@ -62,11 +62,9 @@ do
      fi
 
     # STEP two -- adjoint source
-    # first calculate kernels without attenuation
-    VISCOELASTIC=false
     STARTTIME=$(date +%s)
-    sh $SCRIPTS_DIR/adjoint_source.sh $isource $NPROC_SPECFEM $compute_adjoint $data_list \
-        $measurement_list $misfit_type_list $WORKING_DIR $DISK_DIR $Wscale $wavelet_path $VISCOELASTIC $measurement_attenuation 2>./job_info/error_adj_source
+    sh $SCRIPTS_DIR/adjoint_source_attenuation.sh $isource $NPROC_SPECFEM $compute_adjoint $data_list \
+        $measurement_list $misfit_type_list $WORKING_DIR $DISK_DIR $Wscale $wavelet_path $VISCOELASTIC $measurement_attenuation 2>./job_info/error_adj_source_attenuation
      if [ $isource -eq 1 ] && $compute_adjoint ; then
          ENDTIME=$(date +%s)
          Ttaken=$(($ENDTIME - $STARTTIME))
