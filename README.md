@@ -7,12 +7,19 @@ This package is developed on parallel computing cluster with OpenMPI/MPI. It pro
 Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2D), this new version has the following updates:
 
 (1) The package structure has been changed for easy-using;
+
 (2) Scripts are provided for runing the forward modelling and FWI experiments on local workstation;
-(3) Three different approaches are provided for calculating the Q sensitivity kernels in visco-elastic FWI.
-(4) New parameters are added for forward modelling and FWI with complex topographic variations.
+
+(3) Three different approaches are provided for calculating the Q sensitivity kernels in visco-elastic FWI;
+
+(4) New parameters are added for forward modelling and FWI with complex topographic variations;
+
 (5) Scripts for 3D forward modelling and FWI experiments with GPU are added (the 3D modeling and FWI codes are not provided!)
+
 (6) One single shell script are added for user to setup the environment paths and run the forward modeling and FWI experiments. 
 
+****************************************************************************************************************************************
+****************************************************************************************************************************************
 Please following the steps listed below for installing the package:
 
 (1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
@@ -26,6 +33,10 @@ Please following the steps listed below for installing the package:
 (5) Do inversion experiment, as introduce in sections 2.2.4 and 4 of the manual; Script of 2_inversion_example.sh is provided to do inversion experiment.
 
 (6) plot the results with the script of 3_plot_results.sh.
+
+****************************************************************************************************************************************
+****************************************************************************************************************************************
+
 
 For downloading and using this package for your own studies, please cite the following publications:
 
