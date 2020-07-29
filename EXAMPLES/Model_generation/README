@@ -1,1 +1,4 @@
 
+The matlab scripts are used to generate *.xyz files of the models.
+
+Forward modeling example is provided to generate the model bin files.
