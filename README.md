@@ -26,13 +26,13 @@ Please following the steps listed below for installing the package:
 
 (2) Set the paths for SeisElastic2D with the script of 0_setup.sh, as introduced in section 2.2.2 of the manual;
 
-(3) Install scotch and SPECFEM2D, as introduced in section 2.2.3 of the manual;
+(3) Install scotch, SPECFEM2D and SeisElastic2D with the script of 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual;
 
-(4) Do forward modeling, as introduced in section 3 of the manual. Script of 1_forward_modeling_example.sh is provided to do forward modeling and generate the model files.
+(4) Do forward modeling, as introduced in section 3 of the manual. Script of 2_forward_modeling_example.sh is provided to do forward modeling and generate the model files.
 
-(5) Do inversion experiment, as introduce in sections 2.2.4 and 4 of the manual; Script of 2_inversion_example.sh is provided to do inversion experiment.
+(5) Do inversion experiment, as introduce in sections 2.2.4 and 4 of the manual; Script of 3_inversion_example.sh is provided to do inversion experiment.
 
-(6) plot the results with the script of 3_plot_results.sh.
+(6) plot the results with the script of 4_plot_results.sh.
 
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************
