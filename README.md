@@ -18,9 +18,10 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 
 (6) One single shell script are added for user to setup the environment paths and run the forward modeling and FWI experiments. 
 
-########################################################################################################################################
-########################################################################################################################################
-Please following the steps listed below for installing the package:
+##################################################################
+##################################################################
+
+Please following the steps listed below for installing the package and running the examples on a local workstation:
 
 (1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
 
@@ -34,9 +35,8 @@ Please following the steps listed below for installing the package:
 
 (6) plot the results by bash 4_plot_results.sh.
 
-########################################################################################################################################
-########################################################################################################################################
-
+##################################################################
+##################################################################
 
 For downloading and using this package for your own studies, please cite the following publications:
 
