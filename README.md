@@ -28,7 +28,18 @@ Please following the steps listed below for installing the package and running t
     b. openmpi_4.3.0 is available at https://www.open-mpi.org/software/ompi/v4.0/
 
 (2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual. 
-    Before running 0_setup.sh, please change the corresponding paths in 0_setup.sh for openmpi and ifort.
+    Before running 0_setup.sh, please change the corresponding paths in 0_setup.sh for openmpi and ifort, as shown in the following:
+    
+    ## set the path for intel compiler. The users need to adjust the following paths according to your own computer
+    alias ifort='/home/wenyongp/intel/compilers_and_libraries_2020.1.217/linux/bin/intel64/ifort'
+    source /home/wenyongp/intel/bin/ifortvars.sh ia32
+    source /home/wenyongp/intel/bin/compilervars.sh intel64
+    ## set the path for Openmpi
+    export PATH=/home/wenyongp/Programs/Openmpi-4.0.3/bin:$PATH
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wenyongp/Programs/Openmpi-4.0.3/lib
+    ## set the path for Seismic Unix
+    export CWPROOT=/home/wenyongp/Programs/SU
+    export PATH=$PATH:/home/wenyongp/Programs/SU/bin
 
 (3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch.)
 
