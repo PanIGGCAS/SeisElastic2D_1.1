@@ -26,7 +26,7 @@ echo "configure specfem2d"
 
 cd $SeisElastic2D/specfem2d
 
-./configure CC=icc FC=ifort MPIFC=mpif90 --with-mpi --with-scotch-dir=./src/meshfem2D/scotch_6.0.4
+bash ./configure CC=icc FC=ifort MPIFC=mpif90 --with-mpi --with-scotch-dir=./src/meshfem2D/scotch_6.0.4
 
 ## Compile specfem2d
 
@@ -44,7 +44,14 @@ echo "compile SeisElastic2D"
 
 cd $SeisElastic2D/SeisElastic2D/lib
 
+make -f make_lib clean
+make -f make_lib
+
+cd $SeisElastic2D
+
+echo "#####################################################################"
+
 echo "finish compiling SeisElastic2D"
 
-echo date
+date
 

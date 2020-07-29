@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## running one inversion example on a local workstation
+
+rm -rf $ALL_DATA/*
+rm -rf $WORK_PATH/*
+
 cd $SeisElastic2D/EXAMPLES/FWI_EXAMPLES
 
 tar -zxvf CW_VTI_syn.tar.gz
@@ -8,8 +13,6 @@ cd ./CW_VTI_syn
 
 ######################################################
 ## generate observed data
-
-cp -r ./model_true_bin/*.bin ./submit_job/DATA
 
 cd ./submit_job
 
@@ -27,19 +30,24 @@ echo $ALL_DATA
 
 echo "Starting FWI EXAMPLE"
 
-cd $SeisElastic2D/EXAMPLES/FWI_EXAMPLES/CW_VTI_syn
+rm -rf $WORK_PATH/*
 
-cp -r ./model_init_bin/*.bin ./submit_job/DATA
+cd $SeisElastic2D/EXAMPLES/FWI_EXAMPLES/CW_VTI_syn
 
 cd ./submit_job
 
-cp -r parameter_FWI parameter
+cp -r parameter_inversion parameter
 
 bash submit.sh
 
+echo "###########################################################################"
+
 echo "inversion experiment is finished !!!"
 
-echo "see results at:"
+cd $SeisElastic2D
 
-echo date
+echo "see results at: ./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/submit_job/RESULTS/inversion/Scale0_WD_AD"
+
+date
+
 

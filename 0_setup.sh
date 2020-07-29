@@ -20,8 +20,8 @@ mkdir -p Working_Path
 export FWI_EXAMPLES=$PWD/EXAMPLES/FWI_EXAMPLES
 export WORK_PATH=$PWD/Working_Path
 export ALL_DATA=$PWD/ALL_DATA
-export SeisElastic2D=$PWD/SeisElastic2D
-export seisDD=$PWD/SeisElastic2D
+export SeisElastic2D=$PWD
+export seisDD=$PWD
 export SCRIPTS=$PWD/SeisElastic2D/scripts
 export WORKFLOW=$PWD/SeisElastic2D/workflow
 export SRC=$PWD/SeisElastic2D/SRC
@@ -31,4 +31,6 @@ export SPECFEM3D_GPU=$PWD/specfem3d_GPU
 export SPECFEM3D_GLOBE=$PWD/specfem3d_globe
 export VISUALIZE=$PWD/visualize
 export FD_EXP=$PWD/Model_generation
+
+date
 
