@@ -14,7 +14,7 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 
 (4) New parameters are added for forward modelling and FWI with complex topographic variations;
 
-(5) Scripts for 3D forward modelling and FWI experiments with GPU are added (the 3D modeling and FWI codes are not provided!)
+(5) Scripts for 3D forward modelling and FWI experiments with GPU are added (the 3D modeling and FWI examples will be provided in SeisElastic3D.)
 
 ##################################################################
 ##################################################################
