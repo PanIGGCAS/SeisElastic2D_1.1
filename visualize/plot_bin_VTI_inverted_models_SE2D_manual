@@ -140,8 +140,8 @@ if __name__ == '__main__':
         v_rho_p1=[]
         min = 1000000
         max = -1000000
-        model_true_path='./model_true_bin_ttiecu'
-        model_inverted_path='./model_inverted_bin_vtiec_manual'
+        model_true_path='./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/model_true_bin'
+        model_inverted_path='./EXAMPLES/FWI_EXAMPLES/RESULTS_example/inversion/Scale0_WD_AD/m_30'
         for iproc in range(0,nproc):
 
             filename = os.path.join(model_true_path, 'proc%06d_x.bin' % iproc)
@@ -188,7 +188,7 @@ if __name__ == '__main__':
             temp = [read_fortran(filename)]
             v_hti_ec_c55_inverted+= temp
 
-        if ('vp' in par):
+        if ('c11' in par):
             levels_hti_ec_c11_true=np.linspace(np.min((stack(v_hti_ec_c11_true)/1000000000)),np.max((stack(v_hti_ec_c11_true)/1000000000))+0.001,101)
             levels_hti_ec_c13_true=np.linspace(np.min((stack(v_hti_ec_c13_true)/1000000000)),np.max((stack(v_hti_ec_c13_true)/1000000000))+0.001,101)
             levels_hti_ec_c33_true=np.linspace(np.min((stack(v_hti_ec_c33_true)/1000000000)),np.max((stack(v_hti_ec_c33_true)/1000000000))+0.001,101)
@@ -331,6 +331,6 @@ if __name__ == '__main__':
 #    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
     ax.axis('tight')
 
-    pylab.savefig('./Figures_SE2D/Figure_VTI_inverted_models_SE2D_maunal.tiff',format='tiff',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
+#    pylab.savefig('./Figures_SE2D/Figure_VTI_inverted_models_SE2D_maunal.tiff',format='tiff',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
 
-#    pylab.show()
+    pylab.show()
