@@ -25,8 +25,8 @@ Please following the steps listed below for installing the package and running t
 
 (1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
     
-    a. Intel® Parallel Studio XE for Linux is available at https://software.intel.com/content/www/us/en/develop/articles/qualify-for-free-software.html
-    
+    a. Intel® Parallel Studio XE for Linux is available at
+       https://software.intel.com/content/www/us/en/develop/articles/qualify-for-free-software.html
     b. openmpi_4.3.0 is available at https://www.open-mpi.org/software/ompi/v4.0/
 
 (2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual;
