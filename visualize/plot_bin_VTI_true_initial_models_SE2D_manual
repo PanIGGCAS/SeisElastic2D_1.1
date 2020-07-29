@@ -184,7 +184,7 @@ if __name__ == '__main__':
             temp = [read_fortran(filename)]
             v_hti_ec_c55_init+= temp
 
-        if ('vp' in par):
+        if ('c11' in par):
             levels_hti_ec_c11_true=np.linspace(np.min((stack(v_hti_ec_c11_true)/1000000000)),np.max((stack(v_hti_ec_c11_true)/1000000000))+0.001,101)
             levels_hti_ec_c13_true=np.linspace(np.min((stack(v_hti_ec_c13_true)/1000000000)),np.max((stack(v_hti_ec_c13_true)/1000000000))+0.001,101)
             levels_hti_ec_c33_true=np.linspace(np.min((stack(v_hti_ec_c33_true)/1000000000)),np.max((stack(v_hti_ec_c33_true)/1000000000))+0.001,101)
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     print(np.min(stack(v_hti_ec_c33_true)/1000000000), np.max(stack(v_hti_ec_c33_true)/1000000000))
     print(np.min(stack(v_hti_ec_c55_true)/1000000000), np.max(stack(v_hti_ec_c55_true)/1000000000))
 
-    data = scipy.io.loadmat('./Colormap_matrix/C_redblue_2_r.mat')
+    data = scipy.io.loadmat('./visualize/Colormap_matrix/C_redblue_2_r.mat')
     C= data['C_redblue_2_r'].tolist()
     cm = mpl.colors.ListedColormap(C)
 
@@ -466,6 +466,6 @@ if __name__ == '__main__':
 #    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
     ax.axis('tight')
 
-    pylab.savefig('./Figures_SE2D/Figure_VTI_true_initial_models_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
+#    pylab.savefig('./Figures_SE2D/Figure_VTI_true_initial_models_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
 
 #    pylab.show()
