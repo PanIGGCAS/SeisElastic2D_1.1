@@ -87,7 +87,7 @@ arr=$(echo $data_list | tr "," "\n")
 for x in $arr
 do
     if [ -f "SU_process/process_syn.sh" ]; then
-        sh SU_process/process_syn.sh \
+        bash SU_process/process_syn.sh \
             OUTPUT_FILES/U${x}_file_single.su \
             $ISRC_DATA_DIR/U${x}_file_single.su
     else
