@@ -136,7 +136,7 @@ if __name__ == '__main__':
         v_rho_p1=[]
         min = 1000000
         max = -1000000
-        kernel_path='./Scale0_WD_AD/misfit_kernel'
+        kernel_path='./EXAMPLES/FWI_EXAMPLES/RESULTS_example/kernel/Scale0_WD_AD/misfit_kernel'
         for iproc in range(0,nproc):
 
             filename = os.path.join(kernel_path, 'proc%06d_x.bin' % iproc)
@@ -183,7 +183,7 @@ if __name__ == '__main__':
             temp = [read_fortran(filename)]
             pdh_hti_ec_c55+= temp
 
-        if ('vp' in par):
+        if ('kernel' in par):
             levels_k_hti_ec_c11=np.linspace(-np.max((stack(k_hti_ec_c11))),np.max((stack(k_hti_ec_c11))),101)
             levels_k_hti_ec_c13=np.linspace(-np.max((stack(k_hti_ec_c13))),np.max((stack(k_hti_ec_c13))),101)
             levels_k_hti_ec_c33=np.linspace(-np.max((stack(k_hti_ec_c33))),np.max((stack(k_hti_ec_c33))),101)
@@ -196,7 +196,7 @@ if __name__ == '__main__':
             levels=np.linspace(np.min((stack(v))),np.max((stack(v)))+0.1,101)
 #        _, p = meshplot(stack(x)/1000,stack(z)/1000, stack(v),levels=levels)
 
-    data = scipy.io.loadmat('./Colormap_matrix/C_redblue_2_r.mat')
+    data = scipy.io.loadmat('./visualize/Colormap_matrix/C_redblue_2_r.mat')
     C= data['C_redblue_2_r'].tolist()
     cm = mpl.colors.ListedColormap(C)
 
@@ -427,6 +427,6 @@ if __name__ == '__main__':
 #    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
     ax.axis('tight')
 
-    pylab.savefig('./Figures_SE2D/Figure_VTI_kernels_diagonal_Hessian_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
+#    pylab.savefig('./Figures_SE2D/Figure_VTI_kernels_diagonal_Hessian_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
 
-#    pylab.show()
+    pylab.show()
