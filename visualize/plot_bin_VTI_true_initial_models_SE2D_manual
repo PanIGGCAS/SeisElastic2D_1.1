@@ -468,4 +468,4 @@ if __name__ == '__main__':
 
 #    pylab.savefig('./Figures_SE2D/Figure_VTI_true_initial_models_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
 
-#    pylab.show()
+    pylab.show()
