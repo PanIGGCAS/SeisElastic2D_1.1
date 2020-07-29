@@ -3,7 +3,7 @@
 #####################################################################
 ## Compile scotch, which is needed by specfem2d for mesh partitioning.
 
-echo 'install scotch'
+echo "install scotch"
 
 cd $SeisElastic2D/specfem2d/src/meshfem2D
 rm -rf scotch_6.0.4
@@ -16,13 +16,13 @@ make clean
 make scotch
 make ptscotch
 
-echo 'finish installing scotch'
+echo "finish installing scotch"
 
 ## If scotch is installed successfully, please proceed forward.
 #####################################################################
 ## Configure specfem2d
 
-echo 'configure specfem2d'
+echo "configure specfem2d"
 
 cd $SeisElastic2D/specfem2d
 
@@ -30,21 +30,21 @@ cd $SeisElastic2D/specfem2d
 
 ## Compile specfem2d
 
-echo 'compile specfem2d'
+echo "compile specfem2d"
 
 make clean
 make all
 
-echo 'finish compiling specfem2d'
+echo "finish compiling specfem2d"
 
 #####################################################################
 ## Compile SeisElastic2D
 
-echo 'compile SeisElastic2D'
+echo "compile SeisElastic2D"
 
 cd $SeisElastic2D/SeisElastic2D/lib
 
-echo 'finish compiling SeisElastic2D'
+echo "finish compiling SeisElastic2D"
 
 echo date
 
