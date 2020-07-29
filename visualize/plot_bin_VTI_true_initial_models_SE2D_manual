@@ -136,8 +136,8 @@ if __name__ == '__main__':
         v_rho_p1=[]
         min = 1000000
         max = -1000000
-        model_true_path='./All_models_TTI/CW_TTI/model_true_bin_ttiecu'
-        model_init_path='./All_models_TTI/CW_TTI/model_init_bin_ttiecu'
+        model_true_path='./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/model_true_bin'
+        model_init_path='./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/model_init_bin'
         for iproc in range(0,nproc):
 
             filename = os.path.join(model_true_path, 'proc%06d_x.bin' % iproc)
