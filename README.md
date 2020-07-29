@@ -36,7 +36,7 @@ Please following the steps listed below for installing the package and running t
 
 (5) Do inversion experiment by bash 3_inversion_example.sh, as introduce in sections 2.2.4 and 4 of the manual;
 
-(6) plot the results by bash 4_plot_results.sh.
+(6) Plot the results by bash 4_plot_results.sh.
 
 ##################################################################
 ##################################################################
