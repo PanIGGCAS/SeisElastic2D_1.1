@@ -27,7 +27,8 @@ Please following the steps listed below for installing the package and running t
        https://software.intel.com/content/www/us/en/develop/articles/qualify-for-free-software.html
     b. openmpi_4.3.0 is available at https://www.open-mpi.org/software/ompi/v4.0/
 
-(2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual;
+(2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual. 
+    Before running 0_setup.sh, please change the corresponding paths in 0_setup.sh for openmpi and ifort.
 
 (3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch.)
 
