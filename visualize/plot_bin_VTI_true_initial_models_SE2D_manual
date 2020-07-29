@@ -1,0 +1,471 @@
+#!/usr/bin/env python
+## to plot binary kernel or model file
+## usage: plot_bin dirname parameters nproc
+## python version: Python 2.7.11
+
+import os
+import sys
+import numpy as np
+import pylab
+import cmath as math
+from matplotlib import pyplot, cm, colors
+import matplotlib as mpl
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import matplotlib.gridspec as gridspec
+import scipy.io
+from matplotlib.colors import LinearSegmentedColormap
+def isnonzero(a):
+    zmin = np.min(a, axis=0)
+    zmax = np.max(a, axis=0)
+    return np.flatnonzero(zmax-zmin)
+
+
+def stack(v):
+    s = np.hstack(v)
+    return s
+
+def read_fortran(filename):
+    """ Reads Fortran style binary data and returns a numpy array.
+    """
+    with open(filename, 'rb') as file:
+        # read size of record
+        file.seek(0)
+        n = np.fromfile(file, dtype='int32', count=1)[0]
+
+        # read contents of record
+        file.seek(4)
+        v = np.fromfile(file, dtype='float32')
+
+    return v[:-1]
+
+def uniquerows(a, sort_array=False, return_index=False):
+    """ Finds unique rows of numpy array
+    """
+    if sort_array:
+        if return_index:
+            sa, si = sortrows(a, return_index=True)
+        else:
+            sa = sortrows(a)
+    else:
+        sa, sj = sortrows(a, return_inverse=True)
+    ui = np.ones(len(sa), 'bool')
+    ui[1:] = (np.diff(sa, axis=0) != 0).any(axis=1)
+
+    if sort_array:
+        ua = sa[ui]
+        if return_index:
+            ui = si[ui]
+    else:
+        ua = a[ui[sj]]
+        if return_index:
+            ui = np.array(range(len(ui)))[ui[sj]]
+
+    if return_index:
+        return ua, ui
+    else:
+        return ua
+
+def meshplot(x, y, z, levels=None):
+    """ Plots values on 2D unstructured mesh
+    """
+
+    r = (np.max(x) - np.min(x))/(np.max(y) - np.min(y))
+    rx = r/np.sqrt(1 + r**2)
+    ry = 1/np.sqrt(1 + r**2)
+
+#    f = pylab.figure(figsize=(15*rx, 15*ry))
+
+    f = pylab.figure(figsize=(8, 8))
+    p = pylab.tricontourf(x, y, z, 125, levels=levels,extend='neither')
+#    p = pylab.tricontourf(x, y, z,125)
+    pylab.axis('image')
+    return f, p
+
+
+if __name__ == '__main__':
+    """ Plots data on 2-D unstructured mesh
+
+    Reads mesh coordinates from first two columns of text file and data from
+    subsequent columns, computes Delaunay triangulation, and plots data
+    using matplotlib.
+
+    In particular, can be used to plot kernels and models output from SPECFEM2D
+    on unstructured GLL bases.
+    """
+    parameters = sys.argv[1]
+    nproc=int(sys.argv[2])
+#    parameters2=
+
+    x = []
+    z = []
+    z1=[]
+    x1=[]
+    for par in parameters.split(','):
+        v_hti_ec_c11_true = []
+        v_hti_ec_c13_true=[]
+        v_hti_ec_c33_true=[]
+        v_hti_ec_c55_true=[]
+        v_hti_th_theta_true=[]
+        v_rho_true=[]
+        v_hti_ec_c11_true1 = []
+        v_hti_ec_c13_true1=[]
+        v_hti_ec_c33_true1=[]
+        v_hti_ec_c55_true1=[]
+        v_rho_true1=[]
+        v_hti_ec_c11_init = []
+        v_hti_ec_c13_init=[]
+        v_hti_ec_c33_init=[]
+        v_hti_ec_c55_init=[]
+        v_hti_th_theta_init=[]
+        v_rho_init=[]
+        v_hti_ec_c11_init1 = []
+        v_hti_ec_c13_init1=[]
+        v_hti_ec_c33_init1=[]
+        v_hti_ec_c55_init1=[]
+        v_rho_init1=[]
+        v_hti_th_vp_p = []
+        v_hti_th_vs_p=[]
+        v_hti_th_epsilon_p=[]
+        v_hti_th_delta_p=[]
+        v_rho_p=[]
+        v_hti_th_vp_p1 = []
+        v_hti_th_vs_p1=[]
+        v_hti_th_epsilon_p1=[]
+        v_hti_th_delta_p1=[]
+        v_rho_p1=[]
+        min = 1000000
+        max = -1000000
+        model_true_path='./All_models_TTI/CW_TTI/model_true_bin_ttiecu'
+        model_init_path='./All_models_TTI/CW_TTI/model_init_bin_ttiecu'
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_true_path, 'proc%06d_x.bin' % iproc)
+            x += [read_fortran(filename)]
+            filename = os.path.join(model_true_path, 'proc%06d_z.bin' % iproc)
+            z += [read_fortran(filename)]
+
+            filename = os.path.join(model_true_path, 'proc%06d_%s.bin' % (iproc, 'c11'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c11_true+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_true_path, 'proc%06d_%s.bin' % (iproc, 'c13'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c13_true+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_true_path, 'proc%06d_%s.bin' % (iproc, 'c33'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c33_true+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_true_path, 'proc%06d_%s.bin' % (iproc, 'c55'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c55_true+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_init_path, 'proc%06d_%s.bin' % (iproc, 'c11'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c11_init+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_init_path, 'proc%06d_%s.bin' % (iproc, 'c13'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c13_init+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_init_path, 'proc%06d_%s.bin' % (iproc, 'c33'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c33_init+= temp
+        for iproc in range(0,nproc):
+
+            filename = os.path.join(model_init_path, 'proc%06d_%s.bin' % (iproc, 'c55'))
+            temp = [read_fortran(filename)]
+            v_hti_ec_c55_init+= temp
+
+        if ('vp' in par):
+            levels_hti_ec_c11_true=np.linspace(np.min((stack(v_hti_ec_c11_true)/1000000000)),np.max((stack(v_hti_ec_c11_true)/1000000000))+0.001,101)
+            levels_hti_ec_c13_true=np.linspace(np.min((stack(v_hti_ec_c13_true)/1000000000)),np.max((stack(v_hti_ec_c13_true)/1000000000))+0.001,101)
+            levels_hti_ec_c33_true=np.linspace(np.min((stack(v_hti_ec_c33_true)/1000000000)),np.max((stack(v_hti_ec_c33_true)/1000000000))+0.001,101)
+            levels_hti_ec_c55_true=np.linspace(np.min((stack(v_hti_ec_c55_true)/1000000000)),np.max((stack(v_hti_ec_c55_true)/1000000000))+0.001,101)
+        else:
+            levels=np.linspace(np.min((stack(v))),np.max((stack(v)))+0.1,101)
+#        _, p = meshplot(stack(x)/1000,stack(z)/1000, stack(v),levels=levels)
+
+    print(np.min(stack(v_hti_ec_c11_true)/1000000000), np.max(stack(v_hti_ec_c11_true)/1000000000))
+    print(np.min(stack(v_hti_ec_c13_true)/1000000000), np.max(stack(v_hti_ec_c13_true)/1000000000))
+    print(np.min(stack(v_hti_ec_c33_true)/1000000000), np.max(stack(v_hti_ec_c33_true)/1000000000))
+    print(np.min(stack(v_hti_ec_c55_true)/1000000000), np.max(stack(v_hti_ec_c55_true)/1000000000))
+
+    data = scipy.io.loadmat('./Colormap_matrix/C_redblue_2_r.mat')
+    C= data['C_redblue_2_r'].tolist()
+    cm = mpl.colors.ListedColormap(C)
+
+############################################################################################
+
+    fontindex = {'family': 'arial','color':  'black','weight': 'bold','size': 22,}
+    gs1 = gridspec.GridSpec(2, 4)
+    gs10 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[0])
+    gs11 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[1])
+    gs12 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[2])
+    gs13 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[3])
+
+    gs15 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[4])
+    gs16 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[5])
+    gs17 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[6])
+    gs18 = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=gs1[7])
+
+    gs1.update(wspace = 0.3, hspace = 0.1)
+
+    f1 = pylab.figure(figsize=(15, 6))
+    ax10=pylab.subplot(gs10[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c11_true),levels=levels_hti_ec_c11_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('Depth (km)',fontsize=13)
+    pylab.xlabel('Distance (km)',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([0.1,0.3,0.5])
+    pylab.yticks([0.2,0.4,0.6,0.8,1.0,1.2])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[1.7, 2.2, 2.7])
+    pbar.ax.set_ylabel('GPa', labelpad=-25, y='-0.12', rotation=0)
+    ax.text(.19, .98, r'a)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
+    ax.axis('tight')
+
+    f1 = pylab.figure(figsize=(12.8, 10))
+    ax10=pylab.subplot(gs10[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c11_true)/1000000000,levels=levels_hti_ec_c11_true,extend='both')
+    pylab.plot([0.045],[0.125], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.25], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.375], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.5], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.625], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.75], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[0.875], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[1.0], marker=5,markersize=8,color='blue')
+    pylab.plot([0.045],[1.125], marker=5,markersize=8,color='blue')
+
+    pylab.plot([0.58],[0.125], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.25], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.375], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.5], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.625], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.75], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[0.875], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[1.0], marker=4,markersize=8,color='blue')
+    pylab.plot([0.58],[1.125], marker=4,markersize=8,color='blue')
+
+    pylab.plot([0.045],[0.1875], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.3125], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.4375], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.5625], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.6875], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.8125], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[0.9375], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.045],[1.0625], marker='*',markersize=8,color='magenta')
+
+    pylab.plot([0.58],[0.1875], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.3125], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.4375], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.5625], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.6875], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.8125], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[0.9375], marker='*',markersize=8,color='magenta')
+    pylab.plot([0.58],[1.0625], marker='*',markersize=8,color='magenta')
+    p.set_cmap(cm)
+    pylab.ylabel('Depth (km)',fontsize=13)
+    pylab.xlabel('',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([])
+    pylab.yticks([0.2,0.4,0.6,0.8,1.0,1.2])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[22, 32, 42])
+    pbar.ax.set_ylabel('GPa', labelpad=-21, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{t}}_{c_{11}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'a)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+#    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
+    ax.axis('tight')
+
+    ax12=pylab.subplot(gs11[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c13_true)/1000000000,levels=levels_hti_ec_c13_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[7, 10, 13])
+    pbar.ax.set_ylabel('GPa', labelpad=-21, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{t}}_{c_{13}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'b)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.axis('tight')
+
+    ax14=pylab.subplot(gs12[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c33_true)/1000000000,levels=levels_hti_ec_c33_true,extend='both')
+    p.set_cmap(pylab.cm.jet_r)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[18, 26, 34])
+    pbar.ax.set_ylabel(r'GPa', labelpad=-25, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{t}}_{c_{33}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'c)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.axis('tight')
+    xlabel = ax14.set_xlabel('',size=13) 
+
+    ax16=pylab.subplot(gs13[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c55_true)/1000000000,levels=levels_hti_ec_c55_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('',fontsize=13)
+    pylab.rc('font',family='arial',size=13)
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[6.5, 9.5, 12.5])
+    pbar.ax.set_ylabel(r'GPa', labelpad=-25, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{t}}_{c_{55}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'd)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+#    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
+    ax.axis('tight')
+
+    ax10=pylab.subplot(gs15[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c11_init)/1000000000,levels=levels_hti_ec_c11_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('Depth (km)',fontsize=13)
+    pylab.xlabel('Distance (km)',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([0.1,0.3,0.5])
+    pylab.yticks([0.2,0.4,0.6,0.8,1.0,1.2])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[22, 32, 42])
+    pbar.ax.set_ylabel('GPa', labelpad=-21, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{0}}_{c_{11}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'e)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+#    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
+    ax.axis('tight')
+
+    ax12=pylab.subplot(gs16[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c13_init)/1000000000,levels=levels_hti_ec_c13_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('Distance (km)',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([0.1,0.3,0.5])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[7, 10, 13])
+    pbar.ax.set_ylabel('GPa', labelpad=-21, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{0}}_{c_{13}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'f)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.axis('tight')
+
+    ax14=pylab.subplot(gs17[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c33_init)/1000000000,levels=levels_hti_ec_c33_true,extend='both')
+    p.set_cmap(pylab.cm.jet_r)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('Distance (km)',fontsize=13)
+#    pylab.title('g)', loc='left',fontdict=titlefont)
+    pylab.rc('font',family='arial',size=13)
+#    pylab.gca().invert_yaxis()
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([0.1,0.3,0.5])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[18, 26, 34])
+    pbar.ax.set_ylabel(r'GPa', labelpad=-25, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{0}}_{c_{33}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'g)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.axis('tight')
+    xlabel = ax14.set_xlabel('Distance (km)',size=13) 
+
+    ax16=pylab.subplot(gs18[0])
+    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c55_init)/1000000000,levels=levels_hti_ec_c55_true,extend='both')
+    p.set_cmap(cm)
+    pylab.ylabel('',fontsize=13)
+    pylab.xlabel('Distance (km)',fontsize=13)
+    pylab.rc('font',family='arial',size=13)
+    pylab.axis([0,0.625,1.25,0])
+    pylab.xticks([0.1,0.3,0.5])
+    pylab.yticks([])
+    ax=pylab.gca()
+    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
+    p.set_cmap(cm)
+    divider=make_axes_locatable(ax)
+#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
+#    pbar = pylab.colorbar(p,cax=cax)
+    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[6.5, 9.5, 12.5])
+    pbar.ax.set_ylabel(r'GPa', labelpad=-25, y='-0.11', rotation=0)
+    ax.text(.95, .15, r'$\mathrm{m}^{\mathrm{0}}_{c_{55}}$',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+    ax.text(.19, .98, r'h)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
+#    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
+    ax.axis('tight')
+
+    pylab.savefig('./Figures_SE2D/Figure_VTI_true_initial_models_SE2D_maunal.png',format='png',dpi=300,bbox_extra_artists=[xlabel], bbox_inches='tight');
+
+#    pylab.show()
