@@ -26,7 +26,7 @@ Please following the steps listed below for installing the package:
 
 (2) Set the paths for SeisElastic2D with the script of 0_setup.sh (source 0_setup.sh), as introduced in section 2.2.2 of the manual;
 
-(3) Install scotch, SPECFEM2D and SeisElastic2D with the script of 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual;
+(3) Install scotch, SPECFEM2D and SeisElastic2D with the script of 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in Makefile.inc for installing scotch.)
 
 (4) Do forward modeling, as introduced in section 3 of the manual. Script of 2_forward_modeling_example.sh is provided to do forward modeling and generate the model files.
 
