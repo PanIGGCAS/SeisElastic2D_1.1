@@ -24,8 +24,12 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 Please following the steps listed below for installing the package and running the examples on a local workstation:
 
 (1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
+    
+    a. Intel® Parallel Studio XE for Linux is available at https://software.intel.com/content/www/us/en/develop/articles/qualify-for-free-software.html
+    
+    b. openmpi_4.3.0 is available at https://www.open-mpi.org/software/ompi/v4.0/
 
-(2) Set the paths for SeisElastic2D with the script of 0_setup.sh (source 0_setup.sh), as introduced in section 2.2.2 of the manual;
+(2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual;
 
 (3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch.)
 
