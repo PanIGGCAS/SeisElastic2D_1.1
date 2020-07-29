@@ -136,8 +136,8 @@ if __name__ == '__main__':
         v_rho_p1=[]
         min = 1000000
         max = -1000000
-        model_true_path='./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/model_true_bin'
-        model_init_path='./EXAMPLES/FWI_EXAMPLES/CW_VTI_syn/model_init_bin'
+        model_true_path='./EXAMPLES/Model_generation/CW_VTI_syn/model_true_bin'
+        model_init_path='./EXAMPLES/Model_generation/CW_VTI_syn/model_init_bin'
         for iproc in range(0,nproc):
 
             filename = os.path.join(model_true_path, 'proc%06d_x.bin' % iproc)
@@ -218,29 +218,6 @@ if __name__ == '__main__':
 
     gs1.update(wspace = 0.3, hspace = 0.1)
 
-    f1 = pylab.figure(figsize=(15, 6))
-    ax10=pylab.subplot(gs10[0])
-    p=pylab.tricontourf(stack(x)/1000,stack(z)/1000, stack(v_hti_ec_c11_true),levels=levels_hti_ec_c11_true,extend='both')
-    p.set_cmap(cm)
-    pylab.ylabel('Depth (km)',fontsize=13)
-    pylab.xlabel('Distance (km)',fontsize=13)
-#    pylab.title('g)', loc='left',fontdict=titlefont)
-    pylab.rc('font',family='arial',size=13)
-#    pylab.gca().invert_yaxis()
-    pylab.axis([0,0.625,1.25,0])
-    pylab.xticks([0.1,0.3,0.5])
-    pylab.yticks([0.2,0.4,0.6,0.8,1.0,1.2])
-    ax=pylab.gca()
-    axins = inset_axes(ax,width="2.5%",height="50%", loc=3,bbox_to_anchor=(1.02, 0., 1, 1),bbox_transform=ax.transAxes,borderpad=0,)
-    p.set_cmap(cm)
-    divider=make_axes_locatable(ax)
-#    cax=divider.append_axes("right",size="1.5%",pad=0.05)
-#    pbar = pylab.colorbar(p,cax=cax)
-    pbar = pylab.colorbar(p,cax=axins,format='%.1f',ticks=[1.7, 2.2, 2.7])
-    pbar.ax.set_ylabel('GPa', labelpad=-25, y='-0.12', rotation=0)
-    ax.text(.19, .98, r'a)',horizontalalignment='right',verticalalignment='top',transform=ax.transAxes,fontdict=fontindex)
-    ax10.annotate('', xy=(0.03, 0.46), xytext=(0.06, 0.53),arrowprops=dict(arrowstyle="fancy", connectionstyle="arc3",fc="0.8"),size=13)
-    ax.axis('tight')
 
     f1 = pylab.figure(figsize=(12.8, 10))
     ax10=pylab.subplot(gs10[0])
