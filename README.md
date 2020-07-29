@@ -26,13 +26,13 @@ Please following the steps listed below for installing the package:
 
 (2) Set the paths for SeisElastic2D with the script of 0_setup.sh (source 0_setup.sh), as introduced in section 2.2.2 of the manual;
 
-(3) Install scotch, SPECFEM2D and SeisElastic2D with the script of 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in Makefile.inc for installing scotch.)
+(3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch.)
 
-(4) Do forward modeling, as introduced in section 3 of the manual. Script of 2_forward_modeling_example.sh is provided to do forward modeling and generate the model files.
+(4) Do forward modeling by bash 2_forward_modeling_example.sh, as introduced in section 3 of the manual.
 
-(5) Do inversion experiment, as introduce in sections 2.2.4 and 4 of the manual; Script of 3_inversion_example.sh is provided to do inversion experiment.
+(5) Do inversion experiment by bash 3_inversion_example.sh, as introduce in sections 2.2.4 and 4 of the manual;
 
-(6) plot the results with the script of 4_plot_results.sh.
+(6) plot the results by bash 4_plot_results.sh.
 
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************
