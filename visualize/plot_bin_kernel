@@ -9,6 +9,8 @@ import numpy as np
 import pylab
 from matplotlib import pyplot, cm, colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import scipy.io
+import matplotlib as mpl
 
 def isnonzero(a):
     zmin = np.min(a, axis=0)
@@ -114,36 +116,39 @@ if __name__ == '__main__':
             v+= temp
 
         if ('kernel' in par):
-  #          v=np.correlate(stack(v),stack(v),mode='same')
-  #          v=stack(v)*stack(v)
-            levels=np.linspace(1*np.min((stack(v))),1*np.max((stack(v))),101)
-#            levels=np.linspace(-np.max(abs(stack(v))),np.max(abs(stack(v))),100)
-            ## levels=np.linspace(-2e-9,2e-9,101)
+        #    levels=np.linspace(np.min((stack(v))),np.max((stack(v))),101)
+            levels=np.linspace(-np.max(abs(stack(v))),np.max(abs(stack(v))),100)
         else:
-           levels=np.linspace(1.0*np.min((stack(v))),1.0*np.max((stack(v))),101)
-#            levels=np.linspace(1700,2650,101)
+        #    levels=np.linspace(760,np.max((stack(v))),101)
+            levels=np.linspace(np.min((stack(v))),np.max((stack(v))),101)
+        
+        #if ('vs' in par):
+        #    levels=np.linspace(500,1000,100)
+        #if ('vp' in par):
+        #    levels=np.linspace(1500,3100,100) 
+        #if ('Q' in par):
+        #    levels=np.linspace(20,150,100)
+
         _, p = meshplot(stack(x)/1000,stack(z)/1000,stack(v),levels=levels)
-	#pylab.subplot(2,1,1)
+
+        print(np.max((stack(v))))
+        print(np.min((stack(v))))
+
+        #data = scipy.io.loadmat('/vol6/home/maththu/wenyongp/SeisElastic2D/visualize/Colormap_matrix/cmphaxby_interp.mat')
+        #C = data['NCVjaisnd'].tolist()
+        #C = data['cmphaxby_interp'].tolist()
+        #C = data['NCVmanga'].tolist()
+        #cm = mpl.colors.ListedColormap(C)
         pylab.gca().invert_yaxis()
-	ax=pylab.gca()
-	#im=ax.imshow(np.arange(100).reshape((10,10)))
+        ax=pylab.gca()
         print(np.min(stack(v)), np.max(stack(v)))
-        #pylab.title(par)
         pylab.xlabel('Distance (km)')
         pylab.rc('font',family='arial',size=15)
-
-	pylab.ylabel('Depth (km)');
-#	pylab.grid(True)
-#        p.set_cmap(pylab.cm.PuOr)
-	p.set_cmap(pylab.cm.RdBu_r)
-#        p.set_cmap(pylab.cm.spectral)
-	divider=make_axes_locatable(ax)
-	cax=divider.append_axes("right",size="1%",pad=0.05)
+        pylab.ylabel('Depth (km)')
+        p.set_cmap(pylab.cm.RdYlBu_r)
+        #p.set_cmap(cm)
+        divider=make_axes_locatable(ax)
+        cax=divider.append_axes("right",size="3%",pad=0.05)
         pbar = pylab.colorbar(p,cax=cax)
-	pbar.set_label('m/s',rotation=270)
-#	pylab.savefig('Kernel_kappa.eps',format='eps',dpi=800);
-    #pylab.figure(figsize=(2,2))
-#    fig = pyplot.gcf()
-#    fig.set_size_inches(5,5)
-	#pylab.savefig(par,dpi=400,format='eps');
-    pylab.show()
+        pbar.set_label('GPa',rotation=270)
+        pylab.show()
