@@ -41,7 +41,11 @@ Please following the steps listed below for installing the package and running t
     export CWPROOT=/home/wenyongp/Programs/SU
     export PATH=$PATH:/home/wenyongp/Programs/SU/bin
 
-(3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual; (Before bash 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch.)
+(3) Install scotch, SPECFEM2D and SeisElastic2D by bash 1_compile.sh, as introduced in sections 2.2.3 and 2.2.4 of the manual. Before running 1_compile.sh, please set the paths of icc and mpicc in ./specfem2d/src/meshfem2D/scotch_6.0.4/src/Makefile.inc for installing scotch, as shown in the following:
+
+    CCS		= /home/wenyongp/intel/compilers_and_libraries_2020.1.217/linux/bin/intel64/icc
+    CCP		= /home/wenyongp/Programs/Openmpi-4.0.3/bin/mpicc
+    CCD		= /home/wenyongp/Programs/Openmpi-4.0.3/bin/mpicc
 
 (4) Do forward modeling by bash 2_forward_modeling_example.sh, as introduced in section 3 of the manual.
 
