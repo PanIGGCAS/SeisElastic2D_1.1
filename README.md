@@ -2,7 +2,7 @@
 
 SeisElastic2D is an open-source package for multiparameter FWI in isotropic-, anisotropic- and visco-elastic media built upon several exiting packages including SPECFEM2D, seisDD, etc. Note that the SPECFEM2D package in SeisElastic2D has been updated to calculate the sensitivity kernels in isotropic-, VTI-, TTI- and visco-elastic media with various model parameterizations.
 
-This package is developed on parallel computing cluster with OpenMPI/MPI. It provides different misfit functions, model parameterizations, advanced optimization methods, flexible inversion strategies and workflows, etc.  These features make it promising to overcome the difficulties in multiparameter elastic FWI and bridge the gap between adademic studies and industrial application. Using SeisElastic2D, we have applied isotropic-, VTI- and visco-elastic FWI to practical seismic data for hydrocarbon reservoir characterization.
+This package can be installed on large parallel computing cluster and local workstation with multiple processors. It provides different misfit functions, model parameterizations, advanced optimization methods, flexible inversion strategies and workflows, etc.  These features make it promising to overcome the difficulties in multiparameter elastic FWI and bridge the gap between adademic studies and industrial application. Using SeisElastic2D, we have applied isotropic-, VTI- and visco-elastic FWI to practical seismic data for hydrocarbon reservoir characterization.
 
 Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2D), this new version has the following updates:
 
