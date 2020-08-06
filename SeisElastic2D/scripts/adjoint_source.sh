@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ulimit -s unlimited
+
 isource=$1
 NPROC_SPECFEM=$2
 compute_adjoint=$3

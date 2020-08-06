@@ -50,7 +50,7 @@ arr=$(echo $data_list | tr "," "\n")
 for x in $arr
 do # commented by PWY 14-01-2018
     if [ -f "SU_process/process_adj.sh" ]; then
-        sh SU_process/process_adj.sh \
+        bash SU_process/process_adj.sh \
             $INPUT_DIR/SEM_ATTENUATION/U${x}_file_single.su.adj \
             $ISRC_WORKING_DIR/SEM/U${x}_file_single.su.adj            
     else
