@@ -36,12 +36,15 @@ cd $ISRC_WORKING_DIR
 cp -r $SUBMIT_DIR/parameter ./
 cp -r $SUBMIT_DIR/bin ./
 cp -r $SUBMIT_DIR/DATA ./
+cp -r $velocity_dir/../m_current/*.bin ./DATA
 
 ## copy STATIONS
 ISRC_WORKING_DIR_STATION=$ISRC_WORKING_DIR/DATA/SOURCES
 ISRC_WORKING_DIR_STATION_isource=$( seq --format="$ISRC_WORKING_DIR_STATION/%06.f/" $(($isource-1)) $(($isource-1)) ) # STATIONS corresponding to current isource
 
 cp -r $ISRC_WORKING_DIR_STATION_isource/*.dat ./DATA
+
+cp -r $ISRC_WORKING_DIR_STATION_isource/STATIONS ./DATA
 
 # if $SUBMIT_DIR/SU_process exist
 if [ -d "$SUBMIT_DIR/SU_process" ]; then
@@ -88,7 +91,7 @@ arr=$(echo $data_list | tr "," "\n")
 for x in $arr
 do
     if [ -f "SU_process/process_syn.sh" ]; then
-        sh SU_process/process_syn.sh \
+        bash SU_process/process_syn.sh \
             OUTPUT_FILES/U${x}_file_single.su \
             $ISRC_DATA_DIR/U${x}_file_single.su
     else
