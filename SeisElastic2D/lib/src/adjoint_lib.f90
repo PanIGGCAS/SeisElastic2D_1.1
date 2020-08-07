@@ -363,7 +363,8 @@ subroutine WD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     real(kind=CUSTOM_REAL) :: df,df_new,dw
     ! fft domain
     !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
-    complex, allocatable, dimension(:) :: adj_tw_dis_cmp
+    !complex, allocatable, dimension(:) :: adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp
     integer :: IMID
 
     !! window
@@ -421,7 +422,7 @@ subroutine WD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             enddo
             fvec = wvec / TWOPI
 
-            allocate(adj_tw_dis_cmp(NPT))
+            !allocate(adj_tw_dis_cmp(NPT))
 
             adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
             adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
@@ -458,7 +459,7 @@ subroutine WD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
                 adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
             end select
 
-            deallocate(adj_tw_dis_cmp)
+            !deallocate(adj_tw_dis_cmp)
         endif 
         call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
 
@@ -1394,9 +1395,11 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     real(kind=CUSTOM_REAL) :: df,df_new,dw
     ! fft domain
     !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
-    complex, allocatable, dimension(:) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    !complex, allocatable, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
     complex :: imag_unit
-    complex, allocatable, dimension(:) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    !complex, allocatable, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    complex, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
     integer :: IMID
     !! window
     call cc_window(s,npts,window_type,i_tstart,i_tend,0,0.d0,nlen,s_tw)
@@ -1422,10 +1425,10 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     enddo
     fvec = wvec / TWOPI
 
-    allocate(d_tw_cmp(NPT))
-    allocate(s_tw_cmp(NPT))
-    allocate(s_tw_cmp_2(NPT))
-    allocate(coeff(NPT))
+   ! allocate(d_tw_cmp(NPT))
+   ! allocate(s_tw_cmp(NPT))
+   ! allocate(s_tw_cmp_2(NPT))
+   ! allocate(coeff(NPT))
 
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
@@ -1454,7 +1457,7 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
         epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:nlen)),1)
         epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:nlen))**2,1)
         !adj_tw(1:nlen)=log(abs(d_tw_cmp(1:nlen))/(abs(s_tw_cmp(1:nlen))+epslon))*s_tw_cmp_2(1:nlen)*coeff(1:nlen)*s_tw(1:nlen)/(2*abs(s_tw_cmp(1:nlen))**2+epslon_sq)
-        allocate(adj_tw_dis_cmp_0(NPT))
+       ! allocate(adj_tw_dis_cmp_0(NPT))
         adj_tw_dis_cmp_0 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
         adj_tw_dis_cmp_0(1:NPT)=log(abs(d_tw_cmp(1:NPT))+epslon_d)-log(abs(s_tw_cmp(1:NPT))+epslon_s)
         !adj_tw_dis_cmp_0(1:NPT)=abs(d_tw_cmp(1:NPT))-abs(s_tw_cmp(1:NPT))
@@ -1476,10 +1479,9 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
         endif
 
-!        deallocate(adj_tw_dis_cmp_0)
-        deallocate(d_tw_cmp)
-        deallocate(s_tw_cmp)
-        deallocate(s_tw_cmp_2)
+       ! deallocate(d_tw_cmp)
+       ! deallocate(s_tw_cmp)
+       ! deallocate(s_tw_cmp_2)
 
         !deallocate(imag_unit)
         if (VISCOELASTIC) then
@@ -1490,7 +1492,7 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             ! dispersion part
             adj_tw_dis(1:nlen)=adj_tw(1:nlen)
 
-            allocate(adj_tw_dis_cmp(NPT))
+         !   allocate(adj_tw_dis_cmp(NPT))
 
             adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
             adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
@@ -1511,7 +1513,7 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             case ("ALL")
                 adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
             end select
-            deallocate(adj_tw_dis_cmp)
+          !  deallocate(adj_tw_dis_cmp)
         endif
 
         call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
@@ -1523,7 +1525,7 @@ subroutine SR_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             enddo
             close(1)
         endif
-        deallocate(adj_tw_dis_cmp_0)
+       ! deallocate(adj_tw_dis_cmp_0)
     endif
 !    deallocate(adj_tw_dis_cmp_0)
 end subroutine SR_misfit
@@ -1575,9 +1577,11 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     real(kind=CUSTOM_REAL) :: df,df_new,dw
     ! fft domain
     !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
-    complex, allocatable, dimension(:) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    !complex, allocatable, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
     complex :: imag_unit
-    complex, allocatable, dimension(:) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    !complex, allocatable, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    complex, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
     integer :: IMID
     !! window
     call cc_window(s,npts,window_type,i_tstart,i_tend,0,0.d0,nlen,s_tw)
@@ -1603,26 +1607,27 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     enddo
     fvec = wvec / TWOPI
 
-    allocate(d_tw_cmp(NPT))
-    allocate(s_tw_cmp(NPT))
-    allocate(s_tw_cmp_2(NPT))
-    allocate(coeff(NPT))
+!    allocate(d_tw_cmp(NPT))
+!    allocate(s_tw_cmp(NPT))
+!    allocate(s_tw_cmp_2(NPT))
+!    allocate(coeff(NPT))
 
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(d_tw_cmp,NPT,1)
-!    d_tw_cmp=d_tw_cmp/NPT
+    d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
 
     s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
+    s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp_2(1:NPT) = dcmplx(real(s_tw_cmp(1:NPT)),-aimag(s_tw_cmp(1:NPT)))
     coeff = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     coeff = dcmplx(-wvec*SIN(wvec*tvec),-wvec*COS(wvec*tvec))
 
-    !! spectral-amplitude difference adjoint misfit
+    !! spectral-matching difference adjoint misfit
 !    misfit_output = (sum(abs(d_tw_cmp(1:nlen))*dw))-(sum(abs(s_tw_cmp(1:nlen))*dw))
     misfit_output = sqrt(sum(abs(d_tw_cmp(1:nlen))-abs(s_tw_cmp(1:nlen)))**2*dw)
 !    if (JOINT_MISFIT) then
@@ -1643,7 +1648,7 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
         epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:nlen)),1)
         epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:nlen))**2,1)
         
-        allocate(adj_tw_dis_cmp_0(NPT))
+        !allocate(adj_tw_dis_cmp_0(NPT))
         adj_tw_dis_cmp_0 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
         adj_tw_dis_cmp_0(1:NPT)=abs(d_tw_cmp(1:NPT))-abs(s_tw_cmp(1:NPT))
         adj_tw_dis_cmp_0(1:NPT)=adj_tw_dis_cmp_0(1:NPT)*(real(s_tw_cmp(1:NPT)))/(abs(s_tw_cmp(1:nlen))+epslon_s)
@@ -1656,10 +1661,9 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
         endif
 
-!        deallocate(adj_tw_dis_cmp_0)
-        deallocate(d_tw_cmp)
-        deallocate(s_tw_cmp)
-        deallocate(s_tw_cmp_2)
+!        deallocate(d_tw_cmp)
+!        deallocate(s_tw_cmp)
+!        deallocate(s_tw_cmp_2)
 
         !deallocate(imag_unit)
         if (VISCOELASTIC) then
@@ -1670,7 +1674,7 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             ! dispersion part
             adj_tw_dis(1:nlen)=adj_tw(1:nlen)
 
-            allocate(adj_tw_dis_cmp(NPT))
+          !  allocate(adj_tw_dis_cmp(NPT))
 
             adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
             adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
@@ -1691,7 +1695,7 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             case ("ALL")
                 adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
             end select
-            deallocate(adj_tw_dis_cmp)
+           ! deallocate(adj_tw_dis_cmp)
         endif
 
         call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
@@ -1703,7 +1707,7 @@ subroutine SM_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             enddo
             close(1)
         endif
-        deallocate(adj_tw_dis_cmp_0)
+       ! deallocate(adj_tw_dis_cmp_0)
     endif
 !    deallocate(adj_tw_dis_cmp_0)
 end subroutine SM_misfit
@@ -2225,10 +2229,12 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     real(kind=CUSTOM_REAL), dimension(NPT) :: wvec,fvec,tvec
     real(kind=CUSTOM_REAL) :: df,df_new,dw
     ! fft domain
-    !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
-    complex, allocatable, dimension(:) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    !complex, allocatable, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
     complex :: imag_unit
-    complex, allocatable, dimension(:) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    !complex, allocatable, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    complex, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+
     real(kind=CUSTOM_REAL), dimension(npts) :: d_tw_cmp_n, s_tw_cmp_n
     integer :: IMID
 
@@ -2265,21 +2271,21 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     enddo
     fvec = wvec / TWOPI
 
-    allocate(d_tw_cmp(NPT))
-    allocate(s_tw_cmp(NPT))
-    allocate(s_tw_cmp_2(NPT))
-    allocate(coeff(NPT))
+    !allocate(d_tw_cmp(NPT))
+    !allocate(s_tw_cmp(NPT))
+    !allocate(s_tw_cmp_2(NPT))
+    !allocate(coeff(NPT))
 
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(d_tw_cmp,NPT,1)
-    d_tw_cmp=d_tw_cmp/NPT
+    d_tw_cmp=d_tw_cmp
     d_tw_cmp_n(1:IMID-1)=abs(d_tw_cmp(1:IMID-1))/maxval(abs(d_tw_cmp(1:IMID-1)))
 
     s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
-    s_tw_cmp=s_tw_cmp/NPT
+    s_tw_cmp=s_tw_cmp
     d_tw_cmp_n(1:IMID-1)=abs(d_tw_cmp(1:IMID-1))/maxval(abs(d_tw_cmp(1:IMID-1)))
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
@@ -2299,19 +2305,19 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     misfit_output = omega_shift
 
     if(COMPUTE_ADJOINT) then
-        epslon_s=wtr_env*maxval(abs(s_tw_cmp(1:IMID-1)),1)
-        epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:IMID-1)),1)
-        epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:IMID-1))**2,1)
+        epslon_s=wtr_env*maxval(abs(s_tw_cmp(1:NPT)),1)
+        epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:NPT)),1)
+        epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:NPT))**2,1)
         
 !        call compute_vel(abs(d_tw_cmp(1:nlen)),nlen,dw,nlen,d_tw_amp_vel)
 !        call compute_vel(d_tw_amp_vel,nlen,dw,nlen,d_tw_amp_vel2)
 
-!        Mw = sum(abs(s_tw_cmp(1:NPT))*(d_tw_amp_vel2(1:NPT))*dw)
-        Mw = sum(abs(s_tw_cmp(1:IMID-1))*(abs(d_tw_cmp(1:IMID-1)))*dw)       
-        allocate(adj_tw_dis_cmp_0(NPT))
+        Mw = sum(abs(s_tw_cmp(1:NPT))*(d_tw_amp_vel2(1:NPT))*dw)
+!        Mw = sum(abs(s_tw_cmp(1:IMID-1))*(abs(d_tw_cmp(1:IMID-1)))*dw)       
+        !allocate(adj_tw_dis_cmp_0(NPT))
         adj_tw_dis_cmp_0 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
-!        adj_tw_dis_cmp_0(1:NPT)=omega_shift*d_tw_amp_vel(1:NPT)*(real(s_tw_cmp(1:NPT)))/((abs(s_tw_cmp(1:NPT))+epslon_s)*Mw)
-        adj_tw_dis_cmp_0(1:IMID-1)=-omega_shift*abs(d_tw_cmp(1:IMID-1))*(real(s_tw_cmp(1:IMID-1)))/((abs(s_tw_cmp(1:IMID-1))+epslon_s)*Mw)
+        adj_tw_dis_cmp_0(1:NPT)=omega_shift*d_tw_amp_vel(1:NPT)*(real(s_tw_cmp(1:NPT)))/((abs(s_tw_cmp(1:NPT))+epslon_s)*Mw)
+!        adj_tw_dis_cmp_0(1:IMID-1)=-omega_shift*abs(d_tw_cmp(1:IMID-1))*(real(s_tw_cmp(1:IMID-1)))/((abs(s_tw_cmp(1:IMID-1))+epslon_s)*Mw)
         !IMID = NPT/2
 
         call CFFT(adj_tw_dis_cmp_0,NPT,-1)
@@ -2323,10 +2329,9 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
         endif
 
-!        deallocate(adj_tw_dis_cmp_0)
-        deallocate(d_tw_cmp)
-        deallocate(s_tw_cmp)
-        deallocate(s_tw_cmp_2)
+        !deallocate(d_tw_cmp)
+        !deallocate(s_tw_cmp)
+        !deallocate(s_tw_cmp_2)
 
         !deallocate(imag_unit)
         if (VISCOELASTIC) then
@@ -2338,12 +2343,12 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             ! dispersion part
             adj_tw_dis(1:nlen)=adj_tw(1:nlen)
 
-            allocate(adj_tw_dis_cmp(NPT))
+            !allocate(adj_tw_dis_cmp(NPT))
 
             adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
             adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
             call CFFT(adj_tw_dis_cmp,NPT,1)
-            adj_tw_dis_cmp=adj_tw_dis_cmp/NPT
+            adj_tw_dis_cmp=adj_tw_dis_cmp
             !adj_tw_dis_cmp(1:NPT)=4*log(abs(fvec(1:NPT))/18)*adj_tw_dis_cmp(1:NPT)/TWOPI
             !IMID = NPT/2
             adj_tw_dis_cmp(1:IMID-1)=4*log(abs(fvec(IMID+1:NPT))/f0)*adj_tw_dis_cmp(1:IMID-1)/TWOPI
@@ -2359,7 +2364,7 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             case ("ALL")
                 adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
             end select
-            deallocate(adj_tw_dis_cmp)
+            !deallocate(adj_tw_dis_cmp)
         endif
 
         call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
@@ -2371,7 +2376,7 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             enddo
             close(1)
         endif
-        deallocate(adj_tw_dis_cmp_0)
+        !deallocate(adj_tw_dis_cmp_0)
     endif
 !    deallocate(adj_tw_dis_cmp_0)
 end subroutine CS_misfit
@@ -2419,9 +2424,11 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     real(kind=CUSTOM_REAL) :: df,df_new,dw
     ! fft domain
     !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
-    complex, allocatable, dimension(:) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    !complex, allocatable, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
     complex :: imag_unit
-    complex, allocatable, dimension(:) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    !complex, allocatable, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    complex, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
     integer :: IMID
 
     real(kind=CUSTOM_REAL), dimension(npts) :: d_tw_amp,s_tw_amp
@@ -2457,20 +2464,22 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     enddo
     fvec = wvec / TWOPI
 
-    allocate(d_tw_cmp(NPT))
-    allocate(s_tw_cmp(NPT))
-    allocate(s_tw_cmp_2(NPT))
-    allocate(coeff(NPT))
+   ! allocate(d_tw_cmp(NPT))
+   ! allocate(s_tw_cmp(NPT))
+   ! allocate(s_tw_cmp_2(NPT))
+   ! allocate(coeff(NPT))
 
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(d_tw_cmp,NPT,1)
-    d_tw_cmp=d_tw_cmp/NPT
+    d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
+   ! d_tw_cmp=d_tw_cmp/NPT
 
     s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
-    s_tw_cmp=s_tw_cmp/NPT
+    s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
+   ! s_tw_cmp=s_tw_cmp/NPT
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp_2(1:NPT) = dcmplx(real(s_tw_cmp(1:NPT)),-aimag(s_tw_cmp(1:NPT)))
@@ -2490,11 +2499,14 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
         epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:nlen)),1)
         epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:nlen))**2,1)
      
-        allocate(adj_tw_dis_cmp_0(NPT))
+     !   allocate(adj_tw_dis_cmp_0(NPT))
         adj_tw_dis_cmp_0 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
         adj_tw_dis_cmp_0(1:IMID-1)=2.0_CUSTOM_REAL*(real(fvec(1:IMID-1)*s_tw_cmp(1:IMID-1)))/sum(abs(s_tw_cmp(1:(IMID-1)))**2)-&
           (2.0_CUSTOM_REAL*sum(fvec(1:(IMID-1))*abs(s_tw_cmp(1:(IMID-1)))**2)/sum(abs(s_tw_cmp(1:(IMID-1)))**4))*&
           real(s_tw_cmp(1:IMID-1))
+     !   adj_tw_dis_cmp_0(1:NPT)=2.0_CUSTOM_REAL*(real(fvec(1:NPT)*s_tw_cmp(1:NPT)))/sum(abs(s_tw_cmp(1:NPT))**2)-&
+     !     (2.0_CUSTOM_REAL*sum(fvec(1:NPT)*abs(s_tw_cmp(1:NPT))**2)/sum(abs(s_tw_cmp(1:NPT))**4))*&
+     !     real(s_tw_cmp(1:NPT))
         adj_tw_dis_cmp_0(1:NPT) = -(f_dom_d-f_dom_s)*adj_tw_dis_cmp_0(1:NPT)
         call CFFT(adj_tw_dis_cmp_0,NPT,-1)
 !        adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
@@ -2505,12 +2517,10 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
         endif
 
-!        deallocate(adj_tw_dis_cmp_0)
-        deallocate(d_tw_cmp)
-        deallocate(s_tw_cmp)
-        deallocate(s_tw_cmp_2)
+      !  deallocate(d_tw_cmp)
+      !  deallocate(s_tw_cmp)
+      !  deallocate(s_tw_cmp_2)
 
-        !deallocate(imag_unit)
         if (VISCOELASTIC) then
             
             adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
@@ -2520,7 +2530,7 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             ! dispersion part
             adj_tw_dis(1:nlen)=adj_tw(1:nlen)
 
-            allocate(adj_tw_dis_cmp(NPT))
+         !   allocate(adj_tw_dis_cmp(NPT))
 
             adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
             adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
@@ -2541,7 +2551,7 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             case ("ALL")
                 adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
             end select
-            deallocate(adj_tw_dis_cmp)
+         !   deallocate(adj_tw_dis_cmp)
         endif
 
         call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
@@ -2553,10 +2563,198 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
             enddo
             close(1)
         endif
-        deallocate(adj_tw_dis_cmp_0)
+      !  deallocate(adj_tw_dis_cmp_0)
     endif
 !    deallocate(adj_tw_dis_cmp_0)
 end subroutine CD_misfit
+
+subroutine CD_misfit_test(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement_attenuation_type,&
+        JOINT_MISFIT,misfit_lambda,&
+        window_type,compute_adjoint,&
+        misfit_output, adj)
+!! Central-freqneucy shift (difference) misfit function
+    !! misfit_output = (omega_diff)**2 
+    !! 
+    !! 
+    use constants
+    use m_hilbert_transform
+    implicit none
+    ! inputs & outputs 
+    real(kind=CUSTOM_REAL), dimension(*), intent(in) :: d,s
+    real(kind=CUSTOM_REAL), intent(in) :: deltat,f0
+    integer, intent(in) :: i_tstart,i_tend
+    integer, intent(in) :: npts, window_type
+    logical, intent(in) :: compute_adjoint
+    logical, intent(in) :: VISCOELASTIC
+    logical, intent(in) :: JOINT_MISFIT
+    real(kind=CUSTOM_REAL), intent(in) :: misfit_lambda
+    character(len=3), intent(in) :: measurement_attenuation_type
+    real(kind=CUSTOM_REAL), intent(out) :: misfit_output
+    real(kind=CUSTOM_REAL), dimension(*),intent(out),optional :: adj
+
+    ! window
+    integer :: nlen
+    real(kind=CUSTOM_REAL), dimension(npts) :: d_tw,s_tw
+
+    ! for hilbert transformation
+    real(kind=CUSTOM_REAL) :: epslon_s,epslon_d,epslon_sq
+    real(kind=CUSTOM_REAL), dimension(npts) :: E_d,E_s,E_ratio,hilbt_ratio,hilbt_d,hilbt_s,E_s_sq
+    real(kind=CUSTOM_REAL) :: E_amp_d,E_amp_s,E_amp_ratio
+
+    ! adjoint
+    integer :: i,j,k
+    real(kind=CUSTOM_REAL), dimension(npts) :: adj_tw, adj_tw_amp, adj_tw_dis
+    real(kind=CUSTOM_REAL), dimension(npts) :: adj_tw_dis_t
+
+    ! FFT parameters for attenuation by PWY
+    real(kind=CUSTOM_REAL), dimension(NPT) :: wvec,fvec,tvec
+    real(kind=CUSTOM_REAL) :: df,df_new,dw
+    ! fft domain
+    !complex (SIZE_DOUBLE), dimension(NPT) :: adj_tw_dis_cmp
+    !complex, allocatable, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex, dimension(NPT) :: adj_tw_dis_cmp_0,adj_tw_dis_cmp
+    complex :: imag_unit
+    !complex, allocatable, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    complex, dimension(NPT) :: d_tw_cmp, s_tw_cmp, s_tw_cmp_2,coeff
+    integer :: IMID
+
+    real(kind=CUSTOM_REAL), dimension(npts) :: d_tw_amp,s_tw_amp
+    real(kind=CUSTOM_REAL), dimension(npts) :: d_tw_amp_vel,d_tw_amp_vel2
+
+    real(kind=CUSTOM_REAL) :: omega_shift, dlnA, cc_max
+    real(kind=CUSTOM_REAL) :: Mw, f_dom_s, f_dom_d
+    integer :: ishift
+    real(kind=CUSTOM_REAL), dimension(npts) :: max_index_d,max_index_s
+    !! window
+    call cc_window(s,npts,window_type,i_tstart,i_tend,0,0.d0,nlen,s_tw)
+    call cc_window(d,npts,window_type,i_tstart,i_tend,0,0.d0,nlen,d_tw)
+
+
+    if(nlen<1 .or. nlen>npts) print*,'check nlen ',nlen
+
+    do k = 1,NPT
+        tvec(k)=deltat*(k-1)
+    enddo
+
+    df = 1./(NPT*deltat)
+    dw = TWOPI * df
+    ! calculate frequency spacing of sampling points
+    df_new = 1.0 / (nlen*deltat)
+    ! assemble omega vector (NPT is the FFT length)
+    wvec(:) = 0.
+    do j = 1,NPT
+    if(j > NPT/2+1) then
+        wvec(j) = dw*(j-NPT-1)   ! negative frequencies in second half
+    else
+        wvec(j) = dw*(j-1)       ! positive frequencies in first half
+    endif
+    enddo
+    fvec = wvec / TWOPI
+
+   ! allocate(d_tw_cmp(NPT))
+   ! allocate(s_tw_cmp(NPT))
+   ! allocate(s_tw_cmp_2(NPT))
+   ! allocate(coeff(NPT))
+
+    d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+    d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
+    call CFFT(d_tw_cmp,NPT,1)
+    d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
+   ! d_tw_cmp=d_tw_cmp/NPT
+
+    s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+    s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
+    call CFFT(s_tw_cmp,NPT,1)
+    s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
+   ! s_tw_cmp=s_tw_cmp/NPT
+
+    s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+    s_tw_cmp_2(1:NPT) = dcmplx(real(s_tw_cmp(1:NPT)),-aimag(s_tw_cmp(1:NPT)))
+    coeff = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+    coeff = dcmplx(-wvec*SIN(wvec*tvec),-wvec*COS(wvec*tvec))
+
+!    call xcorr_calc(abs(s_tw_cmp(1:NPT)),abs(d_tw_cmp(1:NPT)),NPT,1,NPT,ishift,dlnA,cc_max) ! 
+    IMID=NPT/2
+    f_dom_s=sum(fvec(1:(IMID-1))*abs(s_tw_cmp(1:(IMID-1)))**2)
+    f_dom_d=sum(fvec(1:(IMID-1))*abs(d_tw_cmp(1:(IMID-1)))**2)
+    
+    !! central frequency difference adjoint misfit
+    misfit_output = f_dom_d-f_dom_s
+
+    if(COMPUTE_ADJOINT) then
+        epslon_s=wtr_env*maxval(abs(s_tw_cmp(1:nlen)),1)
+        epslon_d=wtr_env*maxval(abs(d_tw_cmp(1:nlen)),1)
+        epslon_sq=wtr_env*maxval(abs(s_tw_cmp(1:nlen))**2,1)
+     
+     !   allocate(adj_tw_dis_cmp_0(NPT))
+        adj_tw_dis_cmp_0 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+        adj_tw_dis_cmp_0(1:IMID-1)=2.0_CUSTOM_REAL*(real(fvec(1:IMID-1)*s_tw_cmp(1:IMID-1)))/sum(abs(s_tw_cmp(1:(IMID-1)))**2)-&
+          (2.0_CUSTOM_REAL*sum(fvec(1:(IMID-1))*abs(s_tw_cmp(1:(IMID-1)))**2)/sum(abs(s_tw_cmp(1:(IMID-1)))**4))*&
+          real(s_tw_cmp(1:IMID-1))
+     !   adj_tw_dis_cmp_0(1:NPT)=2.0_CUSTOM_REAL*(real(fvec(1:NPT)*s_tw_cmp(1:NPT)))/sum(abs(s_tw_cmp(1:NPT))**2)-&
+     !     (2.0_CUSTOM_REAL*sum(fvec(1:NPT)*abs(s_tw_cmp(1:NPT))**2)/sum(abs(s_tw_cmp(1:NPT))**4))*&
+     !     real(s_tw_cmp(1:NPT))
+        adj_tw_dis_cmp_0(1:NPT) = -(f_dom_d-f_dom_s)*adj_tw_dis_cmp_0(1:NPT)
+        call CFFT(adj_tw_dis_cmp_0,NPT,-1)
+!        adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
+
+        if (JOINT_MISFIT) then
+            adj_tw(1:nlen)= s_tw(1:nlen)-d_tw(1:nlen)
+        else
+            adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
+        endif
+
+      !  deallocate(d_tw_cmp)
+      !  deallocate(s_tw_cmp)
+      !  deallocate(s_tw_cmp_2)
+
+        if (VISCOELASTIC) then
+            
+            adj_tw(1:nlen)=-real(adj_tw_dis_cmp_0(1:nlen))
+            adj_tw_amp(1:nlen)=adj_tw(1:nlen)
+            call hilbert(adj_tw_amp,nlen)
+            !adj_tw_amp(1:nlen)=-adj_tw_amp(1:nlen)
+            ! dispersion part
+            adj_tw_dis(1:nlen)=adj_tw(1:nlen)
+
+         !   allocate(adj_tw_dis_cmp(NPT))
+
+            adj_tw_dis_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
+            adj_tw_dis_cmp(1:nlen) = dcmplx(adj_tw_dis(1:nlen),0.0_SIZE_DOUBLE)
+            call CFFT(adj_tw_dis_cmp,NPT,1)
+            adj_tw_dis_cmp=adj_tw_dis_cmp/NPT
+            !adj_tw_dis_cmp(1:NPT)=4*log(abs(fvec(1:NPT))/18)*adj_tw_dis_cmp(1:NPT)/TWOPI
+            !IMID = NPT/2
+            adj_tw_dis_cmp(1:IMID-1)=4*log(abs(fvec(IMID+1:NPT))/f0)*adj_tw_dis_cmp(1:IMID-1)/TWOPI
+            adj_tw_dis_cmp(IMID)=0.0
+            adj_tw_dis_cmp(IMID+1:NPT)=4*log(abs(fvec(1:IMID-1))/f0)*adj_tw_dis_cmp(IMID+1:NPT)/TWOPI
+            ! inverse FFT
+            call CFFT(adj_tw_dis_cmp,NPT,-1)
+            select case (measurement_attenuation_type)
+            case ("DIS")
+                adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))
+            case ("AMP")
+                adj_tw(1:nlen)= adj_tw_amp(1:nlen)
+            case ("ALL")
+                adj_tw(1:nlen)= real(adj_tw_dis_cmp(1:nlen))+adj_tw_amp(1:nlen)
+            end select
+         !   deallocate(adj_tw_dis_cmp)
+        endif
+
+        call cc_window_inverse(adj_tw,npts,window_type,i_tstart,i_tend,0,0.d0,adj)
+
+        if( DISPLAY_DETAILS) then
+            open(1,file=trim(output_dir)//'/adj_SR',status='unknown')
+            do  i = i_tstart,i_tend
+            write(1,'(I5,e15.5)') i,adj(i)
+            enddo
+            close(1)
+        endif
+      !  deallocate(adj_tw_dis_cmp_0)
+    endif
+!    deallocate(adj_tw_dis_cmp_0)
+end subroutine CD_misfit_test
+
 
 !-----------------------------------------------------------------------
 subroutine MT_misfit(d,s,npts,deltat,f0,i_tstart,i_tend,VISCOELASTIC,measurement_attenuation_type,window_type,compute_adjoint,&
