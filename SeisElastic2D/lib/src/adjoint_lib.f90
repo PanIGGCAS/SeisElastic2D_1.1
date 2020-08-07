@@ -2286,7 +2286,7 @@ subroutine CS_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
     s_tw_cmp=s_tw_cmp
-    d_tw_cmp_n(1:IMID-1)=abs(d_tw_cmp(1:IMID-1))/maxval(abs(d_tw_cmp(1:IMID-1)))
+    s_tw_cmp_n(1:IMID-1)=abs(s_tw_cmp(1:IMID-1))/maxval(abs(s_tw_cmp(1:IMID-1)))
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp_2(1:NPT) = dcmplx(real(s_tw_cmp(1:NPT)),-aimag(s_tw_cmp(1:NPT)))
