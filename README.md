@@ -19,7 +19,7 @@ Compared to SeisElastic2D version 1.0 (https://github.com/crewesleo/SeisElastic2
 ##################################################################
 ##################################################################
 
-Please following the steps below for installing and running the examples on a local workstation with at least 8 processors available:
+Please follow the steps below for installing and running the examples on a local workstation with at least 8 processors available:
 
 (1) Install the prerequisite packages, as introduced in section 2.2.1 of the manual;
     
