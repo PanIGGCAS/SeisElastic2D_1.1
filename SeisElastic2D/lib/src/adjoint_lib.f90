@@ -2487,13 +2487,13 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(d_tw_cmp,NPT,1)
-    d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
+    !d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
    ! d_tw_cmp=d_tw_cmp/NPT
 
     s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
-    s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
+    !s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
    ! s_tw_cmp=s_tw_cmp/NPT
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
@@ -2505,6 +2505,9 @@ subroutine CD_misfit(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measurement
     IMID=NPT/2
     f_dom_s=sum(fvec(1:(IMID-1))*abs(s_tw_cmp(1:(IMID-1)))**2)/sum(abs(s_tw_cmp(1:(IMID-1)))**2)
     f_dom_d=sum(fvec(1:(IMID-1))*abs(d_tw_cmp(1:(IMID-1)))**2)/sum(abs(d_tw_cmp(1:(IMID-1)))**2)
+
+    !f_dom_s=sum(fvec(1:(IMID-1))*abs(s_tw_cmp(1:(IMID-1))))/sum(abs(s_tw_cmp(1:(IMID-1))))
+    !f_dom_d=sum(fvec(1:(IMID-1))*abs(d_tw_cmp(1:(IMID-1))))/sum(abs(d_tw_cmp(1:(IMID-1))))
     
     !! central frequency difference adjoint misfit
     misfit_output = f_dom_d-f_dom_s
@@ -2669,13 +2672,13 @@ subroutine CD_misfit_test(d,s,npts,deltat,i_tstart,i_tend,f0,VISCOELASTIC,measur
     d_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     d_tw_cmp(1:nlen) = dcmplx(d_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(d_tw_cmp,NPT,1)
-   ! d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
+    d_tw_cmp=d_tw_cmp/maxval(abs(d_tw_cmp(:)))
    ! d_tw_cmp=d_tw_cmp/NPT
 
     s_tw_cmp = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
     s_tw_cmp(1:nlen) = dcmplx(s_tw(1:nlen),0.0_SIZE_DOUBLE)
     call CFFT(s_tw_cmp,NPT,1)
-   ! s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
+    s_tw_cmp=s_tw_cmp/maxval(abs(s_tw_cmp(:)))
    ! s_tw_cmp=s_tw_cmp/NPT
 
     s_tw_cmp_2 = cmplx(0.0_SIZE_DOUBLE,0.0_SIZE_DOUBLE)
