@@ -590,14 +590,14 @@
               Qmu_kl(i,j,ispec) = -1._CUSTOM_REAL * mu_kl(i,j,ispec)
             endif
             if (trim(Q_KL) == 'chara') then
-              Qkappa_kl(i,j,ispec) = Qkappa_kl(i,j,ispec) - kappal_global(iglob) * Qkappal_global(iglob) * Qkappa_k(iglob) * deltat
+              Qkappa_kl(i,j,ispec) = Qkappa_kl(i,j,ispec) + kappal_global(iglob) * Qkappal_global(iglob) * Qkappa_k(iglob) * deltat
               !                     (1._CUSTOM_REAL + Qkappal_global(iglob))
-              Qmu_kl(i,j,ispec) = Qmu_kl(i,j,ispec) - mul_global(iglob) * Qmul_global(iglob) * Qmu_k(iglob) * deltat
+              Qmu_kl(i,j,ispec) = Qmu_kl(i,j,ispec) + mul_global(iglob) * Qmul_global(iglob) * Qmu_k(iglob) * deltat
               !                     (1._CUSTOM_REAL + Qmul_global(iglob))
             endif
             if (trim(Q_KL) == 'ficht') then
-              Qkappa_kl(i,j,ispec) = Qkappa_kl(i,j,ispec) -Qkappal_global(iglob)*kappal_global(iglob) * Qkappa_k(iglob) * deltat
-              Qmu_kl(i,j,ispec) = Qmu_kl(i,j,ispec) - 2._CUSTOM_REAL*Qmul_global(iglob)*mul_global(iglob)*Qmu_k(iglob)*deltat
+              Qkappa_kl(i,j,ispec) = Qkappa_kl(i,j,ispec) + Qkappal_global(iglob)*kappal_global(iglob) * Qkappa_k(iglob) * deltat
+              Qmu_kl(i,j,ispec) = Qmu_kl(i,j,ispec) + 2._CUSTOM_REAL*Qmul_global(iglob)*mul_global(iglob)*Qmu_k(iglob)*deltat
             endif
             !Qkappa_kl(i,j,ispec) = 0.5_CUSTOM_REAL * Qkappa_kl(i,j,ispec) + 0.5_CUSTOM_REAL * Qmu_kl(i,j,ispec)
 
