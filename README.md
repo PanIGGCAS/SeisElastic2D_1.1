@@ -25,7 +25,7 @@ Please follow the steps below for installing and running the examples on a local
     
     a. Intel® Parallel Studio XE for Linux is available at
        https://software.intel.com/content/www/us/en/develop/articles/qualify-for-free-software.html
-    b. openmpi_4.3.0 is available at https://www.open-mpi.org/software/ompi/v4.0/
+    b. openmpi_4.0.3 is available at https://www.open-mpi.org/software/ompi/v4.0/
 
 (2) Set the paths for SeisElastic2D by source 0_setup.sh, as introduced in section 2.2.2 of the manual. 
     Before running 0_setup.sh, please change the corresponding paths in 0_setup.sh for openmpi and ifort, as shown in the following:
