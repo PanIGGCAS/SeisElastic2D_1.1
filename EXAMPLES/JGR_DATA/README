@@ -1,4 +1,6 @@
-This folder contain the data used in the paper of ""
+This folder contain the data used in the following paper:
+
+Pan, W., Wang, W. and Innanen, K. A. Full-waveform adjoint Q tomography in viscoelastic medium with central-frequency measurements, JGR-solid earth, submitted
 
 1. Exp1 contains the data used in the section of "3.1 Sensitivity analysis of seismic waveforms and multiparameter Hessian-
 vector products" of the paper;
