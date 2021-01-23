@@ -5,6 +5,8 @@ Pan, W., Wang, W. and Innanen, K. A. Full-waveform adjoint Q tomography in visco
 1. Exp1 contains the data used in the section of "3.1 Sensitivity analysis of seismic waveforms and multiparameter Hessian-
 vector products" of the paper;
 
-2. Exp2 contains the observed data used for the inversion experiments in the section of "3.2 Isolated velocity-Q anomaly example";
+2. Exp2 contains the observed data used in the section of "3.2 Isolated velocity-Q anomaly example";
 
 3. Exp3 contains the observed data used in the section of "3.3 Global tomography example";
+
+4. Exp4 contains the observed data used in the section of "3.4 3D viscoelastic inversion example with DAS-VSP data".
