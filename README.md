@@ -58,6 +58,11 @@ Please follow the steps below for installing and running the examples on a local
 
 For downloading and using this package for your own studies, please cite the following publications:
 
+Pan, W., Innanen, K. A., & Wang, Y. (2020). SeisElastic2D: An open-source package for multiparameter full-waveform inversion in isotropic-, anisotropic- and
+visco-elastic media. Computers & Geosciences, 145, 104586.
+
+Pan, W. & Wang, Y., 2020. On the influence of different misfit functions for attenuation estimation in viscoelastic full-waveform inversion: synthetic study. Geophysical Journal International, 221(2), 1292–1319.
+
 Pan, W., Innanen, K & Wang, Y., 2020. Parameterization analysis and field validation of VTI-elastic full-waveform inversion in a walk-away vertical seismic profile configuration, Geophysics. 85(3), B87-B107.
 
 Pan, W. & Innanen, K., 2019. Amplitude-based misfit functions in viscoelastic full-waveform inversion applied to walk-away vertical seismic profile data, Geophysics. 84(5), B335-B351.
